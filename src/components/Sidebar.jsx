@@ -199,6 +199,7 @@ export default function Sidebar({ open, onClose }) {
                     transition: 'transform 0.45s cubic-bezier(0.77,0,0.18,1), width 0.35s cubic-bezier(0.77,0,0.18,1)',
                     boxShadow: open ? '6px 0 40px rgba(0,0,0,0.22)' : 'none',
                     overflowY: isMobile ? 'auto' : 'hidden',
+                    background: '#f5f2ed',
                 }}
             >
                 {/* LEFT PANEL — main nav */}
@@ -206,6 +207,7 @@ export default function Sidebar({ open, onClose }) {
                     style={{
                         width: leftPanelWidth,
                         minWidth: isMobile ? 'auto' : '380px',
+                        minHeight: '100%',
                         height: isMobile ? 'auto' : '100%',
                         background: '#f5f2ed',
                         display: 'flex',
