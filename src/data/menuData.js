@@ -17,7 +17,6 @@ export const menuData = [
                 title: "Hospital Infrastructure",
                 slug: "hospital-infrastructure",
                 children: [
-                    { title: "Clinical Terminal", slug: "clinical-terminal" },
                     { title: "How It Works", slug: "how-it-works" },
                     { title: "Deployment", slug: "deployment" },
                 ],

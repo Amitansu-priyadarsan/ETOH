@@ -10,7 +10,6 @@ import CareersPage from './pages/about/careers'
 // The System
 import TheSystemPage from './pages/the-system'
 import HospitalInfrastructurePage from './pages/the-system/hospital-infrastructure'
-import ClinicalTerminalPage from './pages/the-system/hospital-infrastructure/clinical-terminal'
 import HowItWorksPage from './pages/the-system/hospital-infrastructure/how-it-works'
 import DeploymentPage from './pages/the-system/hospital-infrastructure/deployment'
 import ForCliniciansPage from './pages/the-system/for-clinicians'
@@ -77,7 +76,6 @@ export const router = createBrowserRouter([
     // The System
     { path: '/the-system', element: <TheSystemPage /> },
     { path: '/the-system/hospital-infrastructure', element: <HospitalInfrastructurePage /> },
-    { path: '/the-system/hospital-infrastructure/clinical-terminal', element: <ClinicalTerminalPage /> },
     { path: '/the-system/hospital-infrastructure/how-it-works', element: <HowItWorksPage /> },
     { path: '/the-system/hospital-infrastructure/deployment', element: <DeploymentPage /> },
     { path: '/the-system/for-clinicians', element: <ForCliniciansPage /> },
