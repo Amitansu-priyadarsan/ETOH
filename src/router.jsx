@@ -11,7 +11,10 @@ import CareersPage from './pages/about/careers/Careers'
 import TheSystemPage from './pages/the-system/TheSystem'
 import HospitalInfrastructurePage from './pages/the-system/hospital-infrastructure/HospitalInfrastructure'
 import ForCliniciansPage from './pages/the-system/for-clinicians/ForClinicians'
-import ForPatientsPage from './pages/the-system/for-patients/ForPatients'
+import PreAdmissionPage from './pages/the-system/for-patients/pre-admission/PreAdmission'
+import PatientAppPage from './pages/the-system/for-patients/patient-app/PatientApp'
+import HealthJourneyPage from './pages/the-system/for-patients/health-journey/HealthJourney'
+import PostDischargePage from './pages/the-system/for-patients/post-discharge/PostDischarge'
 import EndToEndCarePage from './pages/the-system/end-to-end-care/EndToEndCare'
 
 // Deployments
@@ -49,7 +52,10 @@ export const router = createBrowserRouter([
     { path: '/the-system', element: <TheSystemPage /> },
     { path: '/the-system/hospital-infrastructure', element: <HospitalInfrastructurePage /> },
     { path: '/the-system/for-clinicians', element: <ForCliniciansPage /> },
-    { path: '/the-system/for-patients', element: <ForPatientsPage /> },
+    { path: '/the-system/for-patients/pre-admission', element: <PreAdmissionPage /> },
+    { path: '/the-system/for-patients/patient-app', element: <PatientAppPage /> },
+    { path: '/the-system/for-patients/health-journey', element: <HealthJourneyPage /> },
+    { path: '/the-system/for-patients/post-discharge', element: <PostDischargePage /> },
     { path: '/the-system/end-to-end-care', element: <EndToEndCarePage /> },
 
     // Deployments

@@ -15,7 +15,16 @@ export const menuData = [
         children: [
             { title: "Hospital Infrastructure", slug: "hospital-infrastructure" },
             { title: "For Clinicians", slug: "for-clinicians" },
-            { title: "For Patients", slug: "for-patients" },
+            {
+                title: "For Patients",
+                slug: "for-patients",
+                children: [
+                    { title: "Pre-Admission", slug: "pre-admission" },
+                    { title: "Patient App", slug: "patient-app" },
+                    { title: "Health Journey (Digital Twin)", slug: "health-journey" },
+                    { title: "Post-Discharge", slug: "post-discharge" },
+                ],
+            },
             { title: "End-to-End Care", slug: "end-to-end-care" },
         ],
     },

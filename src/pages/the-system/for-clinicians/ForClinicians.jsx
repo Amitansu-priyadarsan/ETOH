@@ -1,7 +1,12 @@
 import PageLayout from '../../../components/PageLayout'
-import hero1 from '../../../assets/Clinicians/hero1.png'
-import realTimeRhythm from '../../../assets/Clinicians/reltimerhythm.png'
-import { BedDouble, GitBranch, FlaskConical, BellDot, Zap } from 'lucide-react'
+import hero1 from './assets/hero1.png'
+import section3 from './assets/section3.png'
+import {
+    User, X, Clock, CheckCircle2,
+    FlaskConical, Activity, AlertTriangle,
+    Users, Bell, Package,
+    MonitorCheck, Zap
+} from 'lucide-react'
 
 export default function ForCliniciansPage() {
     return (
@@ -10,31 +15,45 @@ export default function ForCliniciansPage() {
             {/* ── Section 1: Hero ── */}
             <div style={{
                 width: '100%',
-                minHeight: 921,
-                paddingTop: 172,
-                paddingBottom: 172,
+                paddingLeft: 32,
+                paddingRight: 32,
+                paddingTop: 128,
+                paddingBottom: 128,
+                position: 'relative',
+                background: '#001736',
                 overflow: 'hidden',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
                 boxSizing: 'border-box',
+                display: 'flex',
             }}>
+                {/* Background image overlay */}
+                <img
+                    src={hero1}
+                    alt=""
+                    style={{
+                        width: 427,
+                        height: '100%',
+                        right: 0,
+                        top: 0,
+                        position: 'absolute',
+                        opacity: 0.10,
+                        objectFit: 'cover',
+                    }}
+                />
                 <div style={{
                     width: '100%',
-                    maxWidth: 1280,
-                    paddingLeft: 32,
-                    paddingRight: 32,
+                    maxWidth: 1216,
+                    margin: '0 auto',
                     display: 'flex',
                     flexDirection: 'row',
-                    alignItems: 'center',
                     gap: 64,
+                    alignItems: 'flex-start',
                 }}>
                     {/* Left: text content */}
                     <div style={{
                         flex: 1,
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: 24,
+                        gap: 32,
                     }}>
                         {/* Label */}
                         <div style={{
@@ -43,20 +62,20 @@ export default function ForCliniciansPage() {
                             paddingRight: 12,
                             paddingTop: 4,
                             paddingBottom: 4,
-                            background: '#E7E8E9',
-                            borderRadius: 12,
+                            background: 'rgba(0, 105, 112, 0.20)',
+                            borderRadius: 2,
                             width: 'fit-content',
                         }}>
                             <span style={{
-                                color: '#006970',
+                                color: '#96F1FA',
                                 fontSize: 10,
                                 fontFamily: 'Inter, sans-serif',
-                                fontWeight: 700,
+                                fontWeight: 400,
                                 textTransform: 'uppercase',
                                 lineHeight: '15px',
-                                letterSpacing: 2,
+                                letterSpacing: 1,
                             }}>
-                                Operational Excellence
+                                Clinician Experience
                             </span>
                         </div>
 
@@ -66,30 +85,24 @@ export default function ForCliniciansPage() {
                             fontFamily: 'Manrope, sans-serif',
                             fontWeight: 800,
                             lineHeight: '72px',
+                            color: 'white',
                         }}>
-                            <span style={{ color: '#001736' }}>
-                                Every patient.<br />
-                                Every decision.<br />
-                                Every moment.<br />
-                            </span>
-                            <span style={{ color: '#006970' }}>
-                                One view.
-                            </span>
+                            The full<br />picture of<br />every patient.<br />In the pocket<br />of every<br />clinician.
                         </div>
 
                         {/* Subtext */}
                         <div style={{
-                            maxWidth: 576,
-                            paddingTop: 8,
-                            color: '#43474F',
+                            maxWidth: 512,
+                            color: '#7594CA',
                             fontSize: 20,
                             fontFamily: 'Inter, sans-serif',
                             fontWeight: 400,
-                            lineHeight: '32px',
+                            lineHeight: '32.5px',
                         }}>
-                            ETOH&apos;s clinical terminal is the institution&apos;s operating center
-                            — the place where the full complexity of a hospital becomes
-                            legible, manageable, and responsive.
+                            Clinical decisions happen at the bedside, in the
+                            corridor, and between consultations. ETOH goes
+                            where the clinician goes — and it brings
+                            everything they need with it.
                         </div>
 
                         {/* Buttons */}
@@ -103,20 +116,21 @@ export default function ForCliniciansPage() {
                             <button style={{
                                 paddingLeft: 32,
                                 paddingRight: 32,
-                                paddingTop: 17,
-                                paddingBottom: 17,
-                                background: '#001736',
+                                paddingTop: 16,
+                                paddingBottom: 16,
+                                background: 'linear-gradient(90deg, #001736 0%, #002B5B 100%)',
                                 borderRadius: 6,
                                 border: 'none',
+                                outline: '1px rgba(196, 198, 208, 0.20) solid',
+                                outlineOffset: -1,
                                 cursor: 'pointer',
                                 color: 'white',
                                 fontSize: 16,
                                 fontFamily: 'Inter, sans-serif',
                                 fontWeight: 700,
                                 lineHeight: '24px',
-                                boxShadow: '0px 8px 10px -6px rgba(0, 23, 54, 0.10), 0px 20px 25px -5px rgba(0, 23, 54, 0.10)',
                             }}>
-                                Request Infrastructure Audit
+                                Request Deployment
                             </button>
                             <button style={{
                                 paddingLeft: 32,
@@ -126,90 +140,138 @@ export default function ForCliniciansPage() {
                                 background: 'transparent',
                                 borderRadius: 6,
                                 border: 'none',
-                                outline: '1px solid #C4C6D0',
+                                outline: '1px rgba(196, 198, 208, 0.30) solid',
+                                outlineOffset: -1,
                                 cursor: 'pointer',
-                                color: '#001736',
+                                color: 'white',
                                 fontSize: 16,
                                 fontFamily: 'Inter, sans-serif',
                                 fontWeight: 700,
                                 lineHeight: '24px',
                             }}>
-                                View Documentation
+                                System Specs
                             </button>
                         </div>
                     </div>
 
                     {/* Right: image card */}
                     <div style={{
-                        flex: '0 0 576px',
+                        flex: '0 0 auto',
+                        maxWidth: 710,
                         position: 'relative',
-                        background: '#F3F4F5',
-                        borderRadius: 16,
-                        boxShadow: '0px 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                        overflow: 'hidden',
+                        display: 'flex',
+                        flexDirection: 'column',
                     }}>
-                        <img
-                            src={hero1}
-                            alt="Clinical Terminal"
-                            style={{
-                                width: '100%',
-                                height: 576,
-                                objectFit: 'cover',
-                                display: 'block',
-                                opacity: 0.9,
-                            }}
-                        />
-                        {/* Dark gradient overlay */}
+                        {/* Glow */}
                         <div style={{
+                            width: 710,
+                            height: 600,
                             position: 'absolute',
-                            left: 0,
-                            top: 0,
-                            width: '100%',
-                            height: '100%',
-                            background: 'linear-gradient(45deg, rgba(0, 23, 54, 0.40) 0%, rgba(0, 23, 54, 0) 100%)',
+                            background: 'rgba(0, 105, 112, 0.10)',
+                            borderRadius: 12,
+                            filter: 'blur(32px)',
                         }} />
-
-                        {/* Live System Pulse widget */}
                         <div style={{
-                            position: 'absolute',
-                            right: 24,
-                            top: 32,
-                            maxWidth: 200,
-                            padding: 16,
-                            background: 'rgba(255, 255, 255, 0.80)',
-                            borderRadius: 8,
-                            outline: '1px rgba(255, 255, 255, 0.20) solid',
-                            outlineOffset: -1,
-                            backdropFilter: 'blur(12px)',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: 12,
+                            height: 600,
+                            position: 'relative',
+                            background: 'rgba(255, 255, 255, 0)',
                             boxShadow: '0px 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                            overflow: 'hidden',
+                            borderRadius: 16,
+                            outline: '1px rgba(255, 255, 255, 0.10) solid',
+                            outlineOffset: -1,
                         }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <img
+                                src={hero1}
+                                alt="Clinical Terminal"
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    objectFit: 'cover',
+                                    display: 'block',
+                                }}
+                            />
+                            {/* Patient info overlay */}
+                            <div style={{
+                                position: 'absolute',
+                                left: 25,
+                                bottom: 25,
+                                right: 25,
+                                padding: 24,
+                                background: 'rgba(255, 255, 255, 0.80)',
+                                borderRadius: 8,
+                                outline: '1px rgba(255, 255, 255, 0.20) solid',
+                                outlineOffset: -1,
+                                backdropFilter: 'blur(10px)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: 16,
+                            }}>
                                 <div style={{
-                                    width: 8,
-                                    height: 8,
-                                    background: '#006970',
-                                    borderRadius: 12,
-                                    flexShrink: 0,
-                                }} />
-                                <span style={{
-                                    color: '#001736',
-                                    fontSize: 10,
-                                    fontFamily: 'Inter, sans-serif',
-                                    fontWeight: 700,
-                                    textTransform: 'uppercase',
-                                    lineHeight: '15px',
-                                    letterSpacing: 1,
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
                                 }}>
-                                    Live System Pulse
-                                </span>
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                        <div style={{
+                                            width: 40,
+                                            height: 40,
+                                            background: '#006970',
+                                            borderRadius: 12,
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                        }}>
+                                            <User size={16} color="white" strokeWidth={2} />
+                                        </div>
+                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                            <span style={{
+                                                color: '#43474F',
+                                                fontSize: 10,
+                                                fontFamily: 'Inter, sans-serif',
+                                                fontWeight: 400,
+                                                textTransform: 'uppercase',
+                                                lineHeight: '15px',
+                                            }}>
+                                                Active Patient
+                                            </span>
+                                            <span style={{
+                                                color: '#001736',
+                                                fontSize: 14,
+                                                fontFamily: 'Inter, sans-serif',
+                                                fontWeight: 700,
+                                                lineHeight: '20px',
+                                            }}>
+                                                Case #882-Alpha
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                                        <span style={{
+                                            color: '#43474F',
+                                            fontSize: 10,
+                                            fontFamily: 'Inter, sans-serif',
+                                            fontWeight: 400,
+                                            textTransform: 'uppercase',
+                                            lineHeight: '15px',
+                                        }}>
+                                            Live Vitals
+                                        </span>
+                                        <span style={{
+                                            color: '#006970',
+                                            fontSize: 14,
+                                            fontFamily: 'Inter, sans-serif',
+                                            fontWeight: 700,
+                                            lineHeight: '20px',
+                                        }}>
+                                            STABLE
+                                        </span>
+                                    </div>
+                                </div>
+                                {/* Progress bar */}
                                 <div style={{
-                                    height: 8,
-                                    background: '#E7E8E9',
+                                    height: 4,
+                                    background: '#EDEEEF',
                                     borderRadius: 12,
                                     overflow: 'hidden',
                                     position: 'relative',
@@ -218,184 +280,22 @@ export default function ForCliniciansPage() {
                                         position: 'absolute',
                                         left: 0,
                                         top: 0,
-                                        width: '78%',
+                                        width: '66%',
                                         height: '100%',
                                         background: '#006970',
                                     }} />
                                 </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <span style={{
-                                        color: '#43474F',
-                                        fontSize: 10,
-                                        fontFamily: 'Inter, sans-serif',
-                                        fontWeight: 700,
-                                        lineHeight: '15px',
-                                    }}>
-                                        CAPACITY UTILIZATION
-                                    </span>
-                                    <span style={{
-                                        color: '#43474F',
-                                        fontSize: 10,
-                                        fontFamily: 'Inter, sans-serif',
-                                        fontWeight: 700,
-                                        lineHeight: '15px',
-                                    }}>
-                                        78%
-                                    </span>
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* ── Section 2: Complexity Managed ── */}
+            {/* ── Section 2: The Clinical Imperative ── */}
             <div style={{
                 width: '100%',
-                paddingLeft: 120,
-                paddingRight: 120,
-                paddingTop: 90,
-                paddingBottom: 90,
-                background: '#F3F4F5',
-                boxSizing: 'border-box',
-            }}>
-                <div style={{
-                    width: '100%',
-                    maxWidth: 1216,
-                    display: 'flex',
-                    gap: 64,
-                    alignItems: 'flex-start',
-                }}>
-                    {/* Left column: title only */}
-                    <div style={{ flex: '0 0 190px' }}>
-                        <div style={{
-                            fontSize: 36,
-                            fontFamily: 'Manrope, sans-serif',
-                            fontWeight: 700,
-                            lineHeight: '40px',
-                        }}>
-                            <span style={{ color: '#001736' }}>Complexity<br /></span>
-                            <span style={{ color: '#006970' }}>Managed.</span>
-                        </div>
-                    </div>
-
-                    {/* Right column: all content stacked */}
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 48 }}>
-
-                        {/* Body text */}
-                        <div style={{
-                            color: '#43474F',
-                            fontSize: 30,
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: 300,
-                            lineHeight: '48px',
-                        }}>
-                            A modern hospital is a system of extraordinary
-                            complexity. Hundreds of patients at different stages of
-                            care. Dozens of clinical teams making decisions in
-                            parallel.
-                        </div>
-
-                        {/* Two boxes side by side */}
-                        <div style={{ display: 'flex', gap: 0, alignItems: 'stretch' }}>
-                            <div style={{
-                                flex: 1,
-                                padding: 32,
-                                background: 'white',
-                                boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
-                                borderRadius: '8px 0 0 8px',
-                                borderLeft: '4px solid #006970',
-                            }}>
-                                <div style={{
-                                    color: '#191C1D',
-                                    fontSize: 18,
-                                    fontFamily: 'Inter, sans-serif',
-                                    fontWeight: 400,
-                                    lineHeight: '29px',
-                                }}>
-                                    Diagnostic pipelines, bed flows,
-                                    medication cycles, and specialist
-                                    referrals happening simultaneously
-                                    across every ward and every hour.
-                                </div>
-                            </div>
-                            <div style={{
-                                flex: 1,
-                                padding: 32,
-                                background: 'white',
-                                boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
-                                borderRadius: '0 8px 8px 0',
-                                borderLeft: '1px solid #EDEEEF',
-                            }}>
-                                <div style={{
-                                    color: '#43474F',
-                                    fontSize: 16,
-                                    fontFamily: 'Inter, sans-serif',
-                                    fontWeight: 400,
-                                    lineHeight: '26px',
-                                }}>
-                                    The institutions that deliver consistently
-                                    excellent care are the ones whose
-                                    operating infrastructure matches that
-                                    complexity — whose leadership can see
-                                    what is happening.
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Dark card */}
-                        <div style={{
-                            padding: 48,
-                            position: 'relative',
-                            background: '#001736',
-                            overflow: 'hidden',
-                            borderRadius: 16,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: 24,
-                        }}>
-                            <div style={{
-                                position: 'absolute',
-                                width: 256,
-                                height: 256,
-                                right: -30,
-                                top: 41,
-                                background: 'rgba(0, 105, 112, 0.20)',
-                                borderRadius: 12,
-                                filter: 'blur(50px)',
-                            }} />
-                            <div style={{
-                                color: 'white',
-                                fontSize: 24,
-                                fontFamily: 'Inter, sans-serif',
-                                fontWeight: 600,
-                                lineHeight: '32px',
-                                position: 'relative',
-                            }}>
-                                Operational Clarity
-                            </div>
-                            <div style={{
-                                color: '#7594CA',
-                                fontSize: 20,
-                                fontFamily: 'Inter, sans-serif',
-                                fontWeight: 400,
-                                lineHeight: '32px',
-                                position: 'relative',
-                            }}>
-                                Clinical teams can act without friction, and operational gaps surface as
-                                warnings rather than incidents.
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            {/* ── Section 3: The Infrastructure ── */}
-            <div style={{
-                width: '100%',
-                paddingTop: 128,
-                paddingBottom: 128,
+                paddingTop: 96,
+                paddingBottom: 96,
                 background: '#F8F9FA',
                 boxSizing: 'border-box',
             }}>
@@ -408,98 +308,162 @@ export default function ForCliniciansPage() {
                     flexDirection: 'column',
                     gap: 80,
                 }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                    {/* Title */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                         <div style={{
                             color: '#001736',
-                            fontSize: 48,
+                            fontSize: 36,
                             fontFamily: 'Manrope, sans-serif',
-                            fontWeight: 800,
-                            lineHeight: '48px',
+                            fontWeight: 700,
+                            lineHeight: '40px',
                         }}>
-                            The Infrastructure
+                            The Clinical Imperative
                         </div>
-                        <div style={{
-                            maxWidth: 672,
-                            color: '#43474F',
-                            fontSize: 20,
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: 400,
-                            lineHeight: '28px',
-                        }}>
-                            A shared, live picture of the facility for every stakeholder. From
-                            medical directors to nursing floor leads.
-                        </div>
+                        <div style={{ width: 96, height: 4, background: '#006970' }} />
                     </div>
 
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(4, 1fr)',
-                        gap: 0,
-                        border: '1px solid #EDEEEF',
-                        borderRadius: 8,
-                        overflow: 'hidden',
-                    }}>
-                        {[
-                            {
-                                icon: <BedDouble size={24} color="#006970" strokeWidth={1.5} />,
-                                title: 'Bed Status',
-                                desc: 'Real-time patient flow monitoring across all wards and surgical suites.',
-                            },
-                            {
-                                icon: <GitBranch size={24} color="#006970" strokeWidth={1.5} />,
-                                title: 'Care Pathways',
-                                desc: 'Visual progress tracking for every admitted patient against clinical benchmarks.',
-                            },
-                            {
-                                icon: <FlaskConical size={24} color="#006970" strokeWidth={1.5} />,
-                                title: 'Diagnostic Cycles',
-                                desc: 'End-to-end visibility from diagnostic order to verified laboratory results.',
-                            },
-                            {
-                                icon: <BellDot size={24} color="#006970" strokeWidth={1.5} />,
-                                title: 'Operational Alerts',
-                                desc: 'AI-driven resource allocation and proactive care team assignment warnings.',
-                            },
-                        ].map(({ icon, title, desc }, i) => (
-                            <div key={title} style={{
-                                background: 'white',
-                                padding: '40px 40px',
-                                borderRight: i < 3 ? '1px solid #EDEEEF' : 'none',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                minHeight: 268,
-                            }}>
-                                <div style={{ marginBottom: 40 }}>{icon}</div>
-                                <div style={{
-                                    color: '#001736',
-                                    fontSize: 20,
+                    {/* Comparison cards */}
+                    <div style={{ display: 'flex', flexDirection: 'row', gap: 0, alignItems: 'stretch' }}>
+                        {/* Legacy Workflow */}
+                        <div style={{
+                            flex: 1,
+                            paddingTop: 48,
+                            paddingBottom: 80,
+                            paddingLeft: 48,
+                            paddingRight: 48,
+                            background: '#F3F4F5',
+                            borderRadius: '16px 0 0 16px',
+                            borderLeft: '4px rgba(196, 198, 208, 0.30) solid',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 32,
+                        }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                <Clock size={18} color="#43474F" strokeWidth={2} />
+                                <span style={{
+                                    color: '#43474F',
+                                    fontSize: 24,
                                     fontFamily: 'Manrope, sans-serif',
                                     fontWeight: 700,
-                                    lineHeight: '28px',
-                                    marginBottom: 12,
+                                    lineHeight: '32px',
                                 }}>
-                                    {title}
-                                </div>
-                                <div style={{
-                                    color: '#43474F',
-                                    fontSize: 16,
-                                    fontFamily: 'Inter, sans-serif',
-                                    fontWeight: 400,
-                                    lineHeight: '24px',
-                                }}>
-                                    {desc}
-                                </div>
+                                    The Legacy Workflow
+                                </span>
                             </div>
-                        ))}
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                                {[
+                                    { title: 'Fragmented Memory', desc: 'Clinicians rely on scribbled notes on paper or physical charts that stay at the nursing station.' },
+                                    { title: 'Information Lag', desc: 'Waiting for physical lab printouts or returning to a central PC to check for updates.' },
+                                    { title: 'Administrative Friction', desc: 'High cognitive load from reconciling disparate data sources while standing at the bedside.' },
+                                ].map((item) => (
+                                    <div key={item.title} style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+                                        <X size={14} color="#BA1A1A" strokeWidth={3} style={{ marginTop: 5, flexShrink: 0 }} />
+                                        <div>
+                                            <div style={{
+                                                color: '#001736',
+                                                fontSize: 16,
+                                                fontFamily: 'Inter, sans-serif',
+                                                fontWeight: 700,
+                                                lineHeight: '24px',
+                                            }}>
+                                                {item.title}
+                                            </div>
+                                            <div style={{
+                                                color: '#64748B',
+                                                fontSize: 14,
+                                                fontFamily: 'Inter, sans-serif',
+                                                fontWeight: 400,
+                                                lineHeight: '20px',
+                                            }}>
+                                                {item.desc}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* ETOH Standard */}
+                        <div style={{
+                            flex: 1,
+                            paddingTop: 80,
+                            paddingBottom: 48,
+                            paddingLeft: 48,
+                            paddingRight: 48,
+                            position: 'relative',
+                            background: '#001736',
+                            boxShadow: '0px 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                            overflow: 'hidden',
+                            borderRadius: '0 16px 16px 0',
+                            borderLeft: '4px #006970 solid',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 32,
+                        }}>
+                            {/* Decorative icon */}
+                            <div style={{
+                                position: 'absolute',
+                                right: 48,
+                                top: 48,
+                                opacity: 0.10,
+                            }}>
+                                <Zap size={85} color="white" strokeWidth={1} />
+                            </div>
+
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                                <Zap size={22} color="#96F1FA" strokeWidth={2} />
+                                <span style={{
+                                    color: '#96F1FA',
+                                    fontSize: 24,
+                                    fontFamily: 'Manrope, sans-serif',
+                                    fontWeight: 700,
+                                    lineHeight: '32px',
+                                }}>
+                                    The ETOH Standard
+                                </span>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                                {[
+                                    { title: 'Instant Truth', desc: 'Live synchronization ensures that the device in your hand matches the reality of the ward.' },
+                                    { title: 'Frictionless Decisions', desc: 'Integrated diagnostic data allows for immediate verification and prescription adjustments.' },
+                                    { title: 'Closed-Loop Precision', desc: "Commands issued on-app trigger immediate workflows, eliminating the 'wait for clerk' phase." },
+                                ].map((item) => (
+                                    <div key={item.title} style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+                                        <CheckCircle2 size={20} color="#96F1FA" strokeWidth={2} style={{ marginTop: 2, flexShrink: 0 }} />
+                                        <div>
+                                            <div style={{
+                                                color: 'white',
+                                                fontSize: 16,
+                                                fontFamily: 'Inter, sans-serif',
+                                                fontWeight: 700,
+                                                lineHeight: '24px',
+                                            }}>
+                                                {item.title}
+                                            </div>
+                                            <div style={{
+                                                color: '#7594CA',
+                                                fontSize: 14,
+                                                fontFamily: 'Inter, sans-serif',
+                                                fontWeight: 400,
+                                                lineHeight: '20px',
+                                            }}>
+                                                {item.desc}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {/* ── Section 4: Real-Time Rhythm ── */}
+            {/* ── Section 3: The Full Live Record ── */}
             <div style={{
                 width: '100%',
-                paddingTop: 128,
-                paddingBottom: 224,
+                paddingTop: 96,
+                paddingBottom: 96,
+                background: '#F3F4F5',
                 overflow: 'hidden',
                 boxSizing: 'border-box',
             }}>
@@ -509,172 +473,275 @@ export default function ForCliniciansPage() {
                     paddingLeft: 32,
                     paddingRight: 32,
                     display: 'flex',
-                    flexDirection: 'row',
+                    flexDirection: 'column',
+                    alignItems: 'center',
                     gap: 80,
-                    alignItems: 'flex-start',
                 }}>
-                    {/* Left: image card */}
+                    {/* Header */}
                     <div style={{
-                        flex: '0 0 552px',
-                        padding: 4,
-                        background: '#EDEEEF',
-                        borderRadius: 24,
-                        overflow: 'hidden',
+                        maxWidth: 672,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: 8,
                     }}>
-                        <div style={{
-                            background: 'white',
-                            borderRadius: 22,
-                            overflow: 'hidden',
-                            display: 'flex',
-                            flexDirection: 'column',
+                        <span style={{
+                            color: '#006970',
+                            fontSize: 11,
+                            fontFamily: 'Inter, sans-serif',
+                            fontWeight: 700,
+                            textTransform: 'uppercase',
+                            lineHeight: '16.5px',
+                            letterSpacing: 1.1,
+                            textAlign: 'center',
                         }}>
-                            <img
-                                src={realTimeRhythm}
-                                alt="Real-Time Rhythm"
-                                style={{
-                                    width: '100%',
-                                    height: 414,
-                                    objectFit: 'cover',
-                                    display: 'block',
-                                }}
-                            />
-                            <div style={{
-                                padding: 32,
-                                borderTop: '1px solid #EDEEEF',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                gap: 24,
-                            }}>
-                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 7 }}>
-                                    <div style={{
-                                        height: 4,
-                                        background: '#E7E8E9',
-                                        borderRadius: 12,
-                                        overflow: 'hidden',
-                                        position: 'relative',
-                                    }}>
-                                        <div style={{
-                                            position: 'absolute',
-                                            left: 0,
-                                            top: 0,
-                                            width: '50%',
-                                            height: '100%',
-                                            background: '#006970',
-                                        }} />
-                                    </div>
-                                    <span style={{
-                                        color: '#43474F',
-                                        fontSize: 10,
-                                        fontFamily: 'Inter, sans-serif',
-                                        fontWeight: 700,
-                                        textTransform: 'uppercase',
-                                        lineHeight: '15px',
-                                        letterSpacing: 1,
-                                    }}>
-                                        Infrastructure Load
-                                    </span>
-                                </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2 }}>
-                                    <span style={{
-                                        color: '#001736',
-                                        fontSize: 24,
-                                        fontFamily: 'Manrope, sans-serif',
-                                        fontWeight: 900,
-                                        lineHeight: '32px',
-                                    }}>
-                                        0.02s
-                                    </span>
-                                    <span style={{
-                                        color: '#006970',
-                                        fontSize: 10,
-                                        fontFamily: 'Inter, sans-serif',
-                                        fontWeight: 700,
-                                        textTransform: 'uppercase',
-                                        lineHeight: '15px',
-                                        letterSpacing: 1,
-                                    }}>
-                                        Latency
-                                    </span>
-                                </div>
-                            </div>
+                            Comprehensive Visualization
+                        </span>
+                        <div style={{
+                            color: '#001736',
+                            fontSize: 36,
+                            fontFamily: 'Manrope, sans-serif',
+                            fontWeight: 700,
+                            lineHeight: '40px',
+                            textAlign: 'center',
+                        }}>
+                            The Full Live Record
+                        </div>
+                        <div style={{
+                            paddingTop: 8,
+                            color: '#43474F',
+                            fontSize: 16,
+                            fontFamily: 'Inter, sans-serif',
+                            fontWeight: 400,
+                            lineHeight: '24px',
+                            textAlign: 'center',
+                        }}>
+                            No more scrolling through static PDFs. Explore clinical data through an interactive, live-updating architectural interface.
                         </div>
                     </div>
 
-                    {/* Right: text content */}
+                    {/* Bento grid */}
                     <div style={{
-                        flex: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 40,
+                        width: '100%',
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(3, 1fr)',
+                        gridTemplateRows: 'auto auto',
+                        gap: 0,
                     }}>
-                        <div style={{
-                            color: '#001736',
-                            fontSize: 48,
-                            fontFamily: 'Manrope, sans-serif',
-                            fontWeight: 800,
-                            lineHeight: '60px',
-                        }}>
-                            Real-Time Rhythm
-                        </div>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+                        {/* Row 1: Live Diagnostics (spans left), Nursing Obs (center), Critical Flags (right) */}
+                        <div style={{ display: 'contents' }}>
+                            {/* Live Diagnostics */}
                             <div style={{
-                                color: '#43474F',
-                                fontSize: 20,
-                                fontFamily: 'Inter, sans-serif',
-                                fontWeight: 400,
-                                lineHeight: '32px',
+                                padding: 32,
+                                background: 'white',
+                                borderRadius: 16,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-between',
                             }}>
-                                The terminal is designed around the rhythm of clinical
-                                work, not the rhythm of administrative reporting.
-                            </div>
-                            <div style={{
-                                color: '#191C1D',
-                                fontSize: 20,
-                                fontFamily: 'Inter, sans-serif',
-                                fontWeight: 600,
-                                lineHeight: '32px',
-                            }}>
-                                It does not describe yesterday. It shows today — and it
-                                shapes what tomorrow looks like for every patient
-                                currently in the system.
-                            </div>
-                        </div>
-
-                        <div style={{ paddingTop: 56, borderTop: '1px solid #E7E8E9' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                                <div style={{
-                                    width: 48,
-                                    height: 48,
-                                    flexShrink: 0,
-                                    background: '#96F1FA',
-                                    borderRadius: 12,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}>
-                                    <Zap size={20} color="#006F77" strokeWidth={1.5} />
-                                </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                                    <span style={{
+                                <div>
+                                    <FlaskConical size={24} color="#006970" strokeWidth={1.5} />
+                                    <div style={{
+                                        marginTop: 20,
                                         color: '#001736',
-                                        fontSize: 16,
+                                        fontSize: 20,
                                         fontFamily: 'Inter, sans-serif',
                                         fontWeight: 700,
-                                        lineHeight: '24px',
+                                        lineHeight: '28px',
                                     }}>
-                                        Instant Intelligence
-                                    </span>
-                                    <span style={{
+                                        Live Diagnostics
+                                    </div>
+                                    <div style={{
+                                        marginTop: 8,
                                         color: '#43474F',
                                         fontSize: 14,
                                         fontFamily: 'Inter, sans-serif',
                                         fontWeight: 400,
                                         lineHeight: '20px',
                                     }}>
-                                        Sub-millisecond data synchronization across facility networks.
-                                    </span>
+                                        Real-time lab results with historical trend overlays and predictive drift analysis.
+                                    </div>
+                                </div>
+                                {/* Bar chart */}
+                                <div style={{
+                                    marginTop: 32,
+                                    height: 64,
+                                    padding: 8,
+                                    background: '#EDEEEF',
+                                    borderRadius: 2,
+                                    display: 'flex',
+                                    alignItems: 'flex-end',
+                                    gap: 4,
+                                    overflow: 'hidden',
+                                }}>
+                                    <div style={{ flex: 1, height: '20%', opacity: 0.3, background: '#006970' }} />
+                                    <div style={{ flex: 1, height: '45%', opacity: 0.5, background: '#006970' }} />
+                                    <div style={{ flex: 1, height: '65%', opacity: 0.7, background: '#006970' }} />
+                                    <div style={{ flex: 1, height: '90%', background: '#006970' }} />
+                                    <div style={{ flex: 1, height: '55%', opacity: 0.8, background: '#006970' }} />
+                                </div>
+                            </div>
+
+                            {/* Nursing Obs */}
+                            <div style={{
+                                padding: 32,
+                                background: 'white',
+                                borderRadius: 16,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-between',
+                            }}>
+                                <div style={{ paddingBottom: 16 }}>
+                                    <Activity size={25} color="#006970" strokeWidth={1.5} />
+                                </div>
+                                <div>
+                                    <div style={{
+                                        color: '#001736',
+                                        fontSize: 18,
+                                        fontFamily: 'Inter, sans-serif',
+                                        fontWeight: 600,
+                                        lineHeight: '28px',
+                                    }}>
+                                        Nursing Obs
+                                    </div>
+                                    <div style={{
+                                        color: '#43474F',
+                                        fontSize: 12,
+                                        fontFamily: 'Inter, sans-serif',
+                                        fontWeight: 400,
+                                        lineHeight: '15px',
+                                        marginTop: 4,
+                                    }}>
+                                        Vitals, pain scales, and fluid balance
+                                        charts updated by the minute.
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Critical Flags */}
+                            <div style={{
+                                padding: 32,
+                                position: 'relative',
+                                background: '#001736',
+                                borderRadius: 16,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-between',
+                            }}>
+                                <div style={{ paddingBottom: 16 }}>
+                                    <AlertTriangle size={22.5} color="#96F1FA" strokeWidth={1.5} />
+                                </div>
+                                <div>
+                                    <div style={{
+                                        color: 'white',
+                                        fontSize: 18,
+                                        fontFamily: 'Inter, sans-serif',
+                                        fontWeight: 600,
+                                        lineHeight: '28px',
+                                    }}>
+                                        Critical Flags
+                                    </div>
+                                    <div style={{
+                                        color: '#7594CA',
+                                        fontSize: 12,
+                                        fontFamily: 'Inter, sans-serif',
+                                        fontWeight: 400,
+                                        lineHeight: '15px',
+                                        marginTop: 4,
+                                    }}>
+                                        AI-driven early warning scores (EWS)
+                                        that alert you before a crisis occurs.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Row 2: Prescription Integrity (spans 1 col with image), MDT Collaboration (spans 2 cols) */}
+                        <div style={{ display: 'contents' }}>
+                            {/* Prescription Integrity */}
+                            <div style={{
+                                padding: 32,
+                                background: 'white',
+                                borderRadius: 16,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 32,
+                                gridColumn: 'span 2',
+                            }}>
+                                <div style={{
+                                    width: 128,
+                                    height: 128,
+                                    flexShrink: 0,
+                                    padding: 16,
+                                    borderRadius: 12,
+                                    outline: '4px rgba(0, 105, 112, 0.20) solid',
+                                    outlineOffset: -4,
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}>
+                                    <img
+                                        src={section3}
+                                        alt="Prescription"
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'cover',
+                                            borderRadius: 8,
+                                        }}
+                                    />
+                                </div>
+                                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                    <div style={{
+                                        color: '#001736',
+                                        fontSize: 20,
+                                        fontFamily: 'Inter, sans-serif',
+                                        fontWeight: 600,
+                                        lineHeight: '28px',
+                                    }}>
+                                        Prescription Integrity
+                                    </div>
+                                    <div style={{
+                                        color: '#43474F',
+                                        fontSize: 14,
+                                        fontFamily: 'Inter, sans-serif',
+                                        fontWeight: 400,
+                                        lineHeight: '20px',
+                                    }}>
+                                        Full medication history including reconciliation notes,
+                                        dosage schedules, and contraindication alerts.
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* MDT Collaboration */}
+                            <div style={{
+                                padding: 32,
+                                background: 'white',
+                                borderRadius: 16,
+                                display: 'flex',
+                                flexDirection: 'column',
+                            }}>
+                                <Users size={25} color="#006970" strokeWidth={1.5} />
+                                <div style={{
+                                    marginTop: 20,
+                                    color: '#001736',
+                                    fontSize: 20,
+                                    fontFamily: 'Inter, sans-serif',
+                                    fontWeight: 700,
+                                    lineHeight: '28px',
+                                }}>
+                                    MDT Collaboration
+                                </div>
+                                <div style={{
+                                    marginTop: 8,
+                                    color: '#43474F',
+                                    fontSize: 14,
+                                    fontFamily: 'Inter, sans-serif',
+                                    fontWeight: 400,
+                                    lineHeight: '20px',
+                                }}>
+                                    Read input from specialists, physios, and social care in one unified timeline.
                                 </div>
                             </div>
                         </div>
@@ -682,95 +749,262 @@ export default function ForCliniciansPage() {
                 </div>
             </div>
 
-            {/* ── Final Section: CTA ── */}
+            {/* ── Section 4: Closing the Loop ── */}
             <div style={{
                 width: '100%',
                 paddingLeft: 32,
                 paddingRight: 32,
-                paddingBottom: 128,
+                paddingTop: 96,
+                paddingBottom: 96,
+                background: '#F8F9FA',
                 boxSizing: 'border-box',
-                display: 'flex',
-                justifyContent: 'center',
             }}>
                 <div style={{
-                    width: '100%',
                     maxWidth: 1216,
-                    padding: 64,
-                    position: 'relative',
-                    background: '#002B5B',
-                    overflow: 'hidden',
-                    borderRadius: 32,
+                    margin: '0 auto',
                     display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: 32,
+                    flexDirection: 'row',
+                    gap: 0,
                 }}>
+                    {/* Left: text + steps */}
                     <div style={{
-                        position: 'absolute',
-                        right: 0,
-                        top: 0,
-                        width: 474,
-                        height: 322,
-                        background: 'linear-gradient(270deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%)',
-                        pointerEvents: 'none',
-                    }} />
-                    <div style={{
-                        color: 'white',
-                        fontSize: 48,
-                        fontFamily: 'Manrope, sans-serif',
-                        fontWeight: 700,
-                        lineHeight: '48px',
-                        textAlign: 'center',
-                        position: 'relative',
-                    }}>
-                        Standardize excellence.<br />
-                        Infrastructure for the next era of care.
-                    </div>
-                    <div style={{
+                        flex: 1,
                         display: 'flex',
+                        flexDirection: 'column',
                         gap: 16,
-                        alignItems: 'center',
-                        flexWrap: 'wrap',
-                        justifyContent: 'center',
-                        position: 'relative',
                     }}>
-                        <button style={{
-                            paddingLeft: 40,
-                            paddingRight: 40,
-                            paddingTop: 21,
-                            paddingBottom: 21,
-                            background: '#006970',
-                            borderRadius: 6,
-                            border: 'none',
-                            cursor: 'pointer',
-                            color: 'white',
-                            fontSize: 16,
+                        <span style={{
+                            color: '#006970',
+                            fontSize: 11,
                             fontFamily: 'Inter, sans-serif',
                             fontWeight: 700,
-                            lineHeight: '24px',
+                            textTransform: 'uppercase',
+                            lineHeight: '16.5px',
+                            letterSpacing: 1.1,
                         }}>
-                            Contact Sales Engineering
-                        </button>
-                        <button style={{
-                            paddingLeft: 40,
-                            paddingRight: 40,
-                            paddingTop: 20,
-                            paddingBottom: 20,
-                            background: 'rgba(255, 255, 255, 0.10)',
-                            borderRadius: 6,
-                            border: 'none',
-                            outline: '1px rgba(255, 255, 255, 0.20) solid',
+                            The Technical Core
+                        </span>
+                        <div style={{
+                            color: '#001736',
+                            fontSize: 36,
+                            fontFamily: 'Manrope, sans-serif',
+                            fontWeight: 700,
+                            lineHeight: '40px',
+                        }}>
+                            Closing the Loop
+                        </div>
+                        <div style={{
+                            paddingTop: 8,
+                            color: '#43474F',
+                            fontSize: 16,
+                            fontFamily: 'Inter, sans-serif',
+                            fontWeight: 400,
+                            lineHeight: '26px',
+                        }}>
+                            The ETOH App isn&apos;t just a viewer—it&apos;s an actor. When you sign
+                            off on a clinical decision, the system initiates an immediate
+                            chain of operational events. This is &quot;Zero-Lag&quot; Clinical
+                            Operations.
+                        </div>
+
+                        {/* Steps */}
+                        <div style={{
+                            paddingTop: 16,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-end',
+                            gap: 24,
+                        }}>
+                            {[
+                                { step: '1. Decision Input', desc: "Clinician enters an order (e.g., 'Escalate IV Fluids')." },
+                                { step: '2. Automated Validation', desc: 'System checks against patient allergy profile and hospital protocol.', indent: true },
+                                { step: '3. Action Trigger', desc: 'Pharmacy is notified, nursing task list is updated, and ward capacity is adjusted.', indent: true },
+                            ].map((item, i) => (
+                                <div key={item.step} style={{
+                                    width: i === 0 ? '100%' : i === 1 ? 'calc(100% - 32px)' : 'calc(100% - 48px)',
+                                    padding: 24,
+                                    background: 'white',
+                                    borderRadius: 4,
+                                    borderLeft: '2px #006970 solid',
+                                }}>
+                                    <div style={{
+                                        color: '#001736',
+                                        fontSize: 16,
+                                        fontFamily: 'Inter, sans-serif',
+                                        fontWeight: 600,
+                                        lineHeight: '24px',
+                                    }}>
+                                        {item.step}
+                                    </div>
+                                    <div style={{
+                                        color: '#64748B',
+                                        fontSize: 14,
+                                        fontFamily: 'Inter, sans-serif',
+                                        fontWeight: 400,
+                                        lineHeight: '20px',
+                                    }}>
+                                        {item.desc}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Right: The Loop Is Sealed card */}
+                    <div style={{
+                        flex: 1,
+                        padding: 48,
+                        position: 'relative',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}>
+                        {/* Background molecule image */}
+                        <img
+                            src={section3}
+                            alt=""
+                            style={{
+                                position: 'absolute',
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                opacity: 0.05,
+                                transform: 'rotate(12deg)',
+                                transformOrigin: 'top left',
+                            }}
+                        />
+
+                        <div style={{
+                            width: '100%',
+                            maxWidth: 448,
+                            paddingTop: 111,
+                            paddingBottom: 111,
+                            position: 'relative',
+                            background: 'rgba(255, 255, 255, 0.80)',
+                            borderRadius: 12,
+                            outline: '1px rgba(196, 198, 208, 0.30) solid',
                             outlineOffset: -1,
-                            backdropFilter: 'blur(6px)',
-                            cursor: 'pointer',
-                            color: 'white',
-                            fontSize: 16,
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: 700,
-                            lineHeight: '24px',
+                            backdropFilter: 'blur(10px)',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            boxShadow: '0px 25px 50px -12px rgba(0, 0, 0, 0.25)',
                         }}>
-                            View Performance Data
-                        </button>
+                            {/* Top floating icon */}
+                            <div style={{
+                                position: 'absolute',
+                                top: -24,
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                                width: 50,
+                                height: 50,
+                                background: 'white',
+                                borderRadius: 8,
+                                outline: '1px rgba(196, 198, 208, 0.20) solid',
+                                outlineOffset: -1,
+                                boxShadow: '0px 4px 6px -4px rgba(0, 0, 0, 0.10), 0px 10px 15px -3px rgba(0, 0, 0, 0.10)',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                                <Bell size={24} color="#006970" strokeWidth={1.5} />
+                            </div>
+
+                            {/* Bottom-left floating icon */}
+                            <div style={{
+                                position: 'absolute',
+                                bottom: 60,
+                                left: -24,
+                                width: 50,
+                                height: 50,
+                                background: 'white',
+                                borderRadius: 8,
+                                outline: '1px rgba(196, 198, 208, 0.20) solid',
+                                outlineOffset: -1,
+                                boxShadow: '0px 4px 6px -4px rgba(0, 0, 0, 0.10), 0px 10px 15px -3px rgba(0, 0, 0, 0.10)',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                                <Users size={24} color="#006970" strokeWidth={1.5} />
+                            </div>
+
+                            {/* Bottom-right floating icon */}
+                            <div style={{
+                                position: 'absolute',
+                                bottom: 60,
+                                right: -24,
+                                width: 50,
+                                height: 50,
+                                background: 'white',
+                                borderRadius: 8,
+                                outline: '1px rgba(196, 198, 208, 0.20) solid',
+                                outlineOffset: -1,
+                                boxShadow: '0px 4px 6px -4px rgba(0, 0, 0, 0.10), 0px 10px 15px -3px rgba(0, 0, 0, 0.10)',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                                <Package size={24} color="#006970" strokeWidth={1.5} />
+                            </div>
+
+                            {/* Center content */}
+                            <div style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                gap: 8,
+                            }}>
+                                {/* Logo icon */}
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 24 }}>
+                                    <MonitorCheck size={55} color="#001736" strokeWidth={1.2} />
+                                    <div style={{
+                                        position: 'relative',
+                                        marginLeft: -8,
+                                        marginTop: -20,
+                                        width: 24,
+                                        height: 24,
+                                        background: '#006970',
+                                        borderRadius: 12,
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}>
+                                        <span style={{
+                                            color: 'white',
+                                            fontSize: 10,
+                                            fontFamily: 'Inter, sans-serif',
+                                            fontWeight: 700,
+                                            lineHeight: '15px',
+                                        }}>
+                                            LIVE
+                                        </span>
+                                    </div>
+                                </div>
+                                <div style={{
+                                    color: '#001736',
+                                    fontSize: 18,
+                                    fontFamily: 'Manrope, sans-serif',
+                                    fontWeight: 800,
+                                    lineHeight: '28px',
+                                    textAlign: 'center',
+                                }}>
+                                    The Loop Is Sealed
+                                </div>
+                                <div style={{
+                                    color: '#43474F',
+                                    fontSize: 14,
+                                    fontFamily: 'Inter, sans-serif',
+                                    fontWeight: 400,
+                                    lineHeight: '20px',
+                                    textAlign: 'center',
+                                    maxWidth: 300,
+                                }}>
+                                    &quot;Documentation is no longer a separate task.
+                                    Documentation IS the clinical action.&quot;
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

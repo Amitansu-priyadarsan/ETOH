@@ -21,9 +21,55 @@ const ChevronIcon = () => (
     </svg>
 )
 
-function SubMenuItem({ item, parentSlug, onNavigate, isMobile }) {
+function SubMenuItem({ item, parentSlug, grandparentSlug, onNavigate, onExpand, isActive, isMobile }) {
     const [hovered, setHovered] = useState(false)
-    const path = `/${parentSlug}/${item.slug}`
+    const hasChildren = item.children?.length > 0
+
+    const handleClick = () => {
+        if (hasChildren) {
+            onExpand()
+        } else {
+            const path = grandparentSlug
+                ? `/${grandparentSlug}/${parentSlug}/${item.slug}`
+                : `/${parentSlug}/${item.slug}`
+            onNavigate(path)
+        }
+    }
+
+    return (
+        <button
+            onClick={handleClick}
+            style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '8px',
+                fontFamily: HEADING_FONT,
+                fontSize: isMobile ? '22px' : '28px',
+                fontWeight: 300,
+                color: isActive ? '#3d3a35' : hovered ? '#3d3a35' : '#727069',
+                padding: isMobile ? '10px 0' : '14px 0',
+                background: 'none',
+                border: 'none',
+                textAlign: 'left',
+                cursor: 'pointer',
+                lineHeight: 1.2,
+                transition: 'color 0.15s ease',
+                boxSizing: 'border-box',
+            }}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+        >
+            <span>{item.title}</span>
+            {hasChildren && <ChevronIcon />}
+        </button>
+    )
+}
+
+function ThirdLevelItem({ item, parentSlug, grandparentSlug, onNavigate, isMobile }) {
+    const [hovered, setHovered] = useState(false)
+    const path = `/${grandparentSlug}/${parentSlug}/${item.slug}`
 
     return (
         <a
@@ -35,10 +81,10 @@ function SubMenuItem({ item, parentSlug, onNavigate, isMobile }) {
             style={{
                 display: 'block',
                 fontFamily: HEADING_FONT,
-                fontSize: isMobile ? '22px' : '28px',
+                fontSize: isMobile ? '20px' : '24px',
                 fontWeight: 300,
                 color: hovered ? '#3d3a35' : '#727069',
-                padding: isMobile ? '10px 0' : '14px 0',
+                padding: isMobile ? '10px 0' : '12px 0',
                 textDecoration: 'none',
                 lineHeight: 1.2,
                 transition: 'color 0.15s ease',
@@ -150,27 +196,53 @@ function SocialIcons({ isMobile }) {
 
 export default function Sidebar({ open, onClose }) {
     const [activeIndex, setActiveIndex] = useState(null)
+    const [activeSubIndex, setActiveSubIndex] = useState(null)
     const navigate = useNavigate()
     const { isMobile } = useResponsive()
 
     const activeItem = activeIndex !== null ? menuData[activeIndex] : null
     const hasSubmenu = activeItem?.children?.length > 0
 
+    const activeSubItem = activeSubIndex !== null && activeItem?.children
+        ? activeItem.children[activeSubIndex]
+        : null
+    const hasThirdLevel = activeSubItem?.children?.length > 0
+
     const handleNavigate = (path) => {
         navigate(path)
         setActiveIndex(null)
+        setActiveSubIndex(null)
         onClose()
     }
 
-    // On mobile, show submenu inline instead of side panel
+    const handleMainClick = (i) => {
+        if (activeIndex === i) {
+            setActiveIndex(null)
+            setActiveSubIndex(null)
+        } else {
+            setActiveIndex(i)
+            setActiveSubIndex(null)
+        }
+    }
+
+    // Panel widths
     const leftPanelWidth = isMobile ? '100%' : '380px'
-    const sidebarWidth = isMobile ? '100%' : (hasSubmenu ? '680px' : '380px')
+    let sidebarWidth
+    if (isMobile) {
+        sidebarWidth = '100%'
+    } else if (hasThirdLevel) {
+        sidebarWidth = '980px'
+    } else if (hasSubmenu) {
+        sidebarWidth = '680px'
+    } else {
+        sidebarWidth = '380px'
+    }
 
     return (
         <>
             {/* Backdrop */}
             <div
-                onClick={() => { onClose(); setActiveIndex(null) }}
+                onClick={() => { onClose(); setActiveIndex(null); setActiveSubIndex(null) }}
                 style={{
                     position: 'fixed',
                     inset: 0,
@@ -220,7 +292,7 @@ export default function Sidebar({ open, onClose }) {
                     {(!hasSubmenu || isMobile) && (
                         <button
                             className="sidebar-close"
-                            onClick={() => { onClose(); setActiveIndex(null) }}
+                            onClick={() => { onClose(); setActiveIndex(null); setActiveSubIndex(null) }}
                             aria-label="Close menu"
                             style={{
                                 position: 'absolute',
@@ -239,7 +311,7 @@ export default function Sidebar({ open, onClose }) {
                                 <MainNavItem
                                     item={section}
                                     isActive={activeIndex === i}
-                                    onClick={() => setActiveIndex(activeIndex === i ? null : i)}
+                                    onClick={() => handleMainClick(i)}
                                     onNavigate={handleNavigate}
                                     isMobile={isMobile}
                                 />
@@ -247,13 +319,31 @@ export default function Sidebar({ open, onClose }) {
                                 {isMobile && activeIndex === i && section.children?.length > 0 && (
                                     <div style={{ paddingLeft: 32, paddingBottom: 8 }}>
                                         {section.children.map((child, j) => (
-                                            <SubMenuItem
-                                                key={j}
-                                                item={child}
-                                                parentSlug={section.slug}
-                                                onNavigate={handleNavigate}
-                                                isMobile={isMobile}
-                                            />
+                                            <div key={j}>
+                                                <SubMenuItem
+                                                    item={child}
+                                                    parentSlug={section.slug}
+                                                    onNavigate={handleNavigate}
+                                                    onExpand={() => setActiveSubIndex(activeSubIndex === j ? null : j)}
+                                                    isActive={activeSubIndex === j}
+                                                    isMobile={isMobile}
+                                                />
+                                                {/* Mobile: 3rd level inline */}
+                                                {isMobile && activeSubIndex === j && child.children?.length > 0 && (
+                                                    <div style={{ paddingLeft: 24, paddingBottom: 8 }}>
+                                                        {child.children.map((grandchild, k) => (
+                                                            <ThirdLevelItem
+                                                                key={k}
+                                                                item={grandchild}
+                                                                parentSlug={child.slug}
+                                                                grandparentSlug={section.slug}
+                                                                onNavigate={handleNavigate}
+                                                                isMobile={isMobile}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
                                         ))}
                                     </div>
                                 )}
@@ -264,7 +354,7 @@ export default function Sidebar({ open, onClose }) {
                     <SocialIcons isMobile={isMobile} />
                 </div>
 
-                {/* RIGHT PANEL — submenu (desktop/tablet only) */}
+                {/* MIDDLE PANEL — level 2 submenu (desktop only) */}
                 {!isMobile && (
                     <div
                         style={{
@@ -277,12 +367,13 @@ export default function Sidebar({ open, onClose }) {
                             opacity: hasSubmenu ? 1 : 0,
                             transition: 'opacity 0.25s ease',
                             overflow: 'hidden',
+                            flexShrink: 0,
                         }}
                     >
                         <div style={{ height: '68px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '24px' }}>
                             <button
                                 className="sidebar-close"
-                                onClick={() => setActiveIndex(null)}
+                                onClick={() => { setActiveIndex(null); setActiveSubIndex(null) }}
                                 aria-label="Close submenu"
                             />
                         </div>
@@ -292,6 +383,47 @@ export default function Sidebar({ open, onClose }) {
                                     key={i}
                                     item={child}
                                     parentSlug={activeItem.slug}
+                                    onNavigate={handleNavigate}
+                                    onExpand={() => setActiveSubIndex(activeSubIndex === i ? null : i)}
+                                    isActive={activeSubIndex === i}
+                                    isMobile={isMobile}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* RIGHT PANEL — level 3 submenu (desktop only) */}
+                {!isMobile && (
+                    <div
+                        style={{
+                            width: '300px',
+                            height: '100%',
+                            background: '#f5f2ed',
+                            borderLeft: '1px solid #e8e5e0',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            opacity: hasThirdLevel ? 1 : 0,
+                            pointerEvents: hasThirdLevel ? 'auto' : 'none',
+                            transition: 'opacity 0.25s ease',
+                            overflow: 'hidden',
+                            flexShrink: 0,
+                        }}
+                    >
+                        <div style={{ height: '68px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '24px' }}>
+                            <button
+                                className="sidebar-close"
+                                onClick={() => setActiveSubIndex(null)}
+                                aria-label="Close submenu"
+                            />
+                        </div>
+                        <div style={{ flex: 1, overflowY: 'auto', padding: '20px 36px' }}>
+                            {activeSubItem?.children?.map((grandchild, i) => (
+                                <ThirdLevelItem
+                                    key={i}
+                                    item={grandchild}
+                                    parentSlug={activeSubItem.slug}
+                                    grandparentSlug={activeItem.slug}
                                     onNavigate={handleNavigate}
                                     isMobile={isMobile}
                                 />
