@@ -1,11 +1,106 @@
+import { useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
 import PageLayout from '../../../components/PageLayout'
 import hero1 from '../../../assets/END-END-CARE/HERO1.png'
 import endEndImg from '../../../assets/END-END-CARE/end-end.png'
 import { ArrowRight, DatabaseZap, Lock } from 'lucide-react'
 
+const ease = [0.22, 1, 0.36, 1]
+const sharp = [0.25, 0.46, 0.45, 0.94]
+
+const heroLines = [
+    { text: 'From the first', last: false },
+    { text: 'contact to the last', last: false },
+    { text: 'follow-up. The', last: false },
+    { text: 'complete episode of', last: false },
+    { text: 'care, connected.', last: true },
+]
+
+const stageCards = [
+    { num: '01', title: 'Pre-Admission', sub: null, desc: 'Early data gathering and risk assessment before the patient even enters the facility.' },
+    { num: '02', title: 'Admission', sub: 'Automated\nHandoff', desc: 'Instant verification and record matching. No duplicate data entry required.' },
+    { num: '03', title: 'Inpatient Care', sub: null, desc: 'Dynamic clinical monitoring and diagnostics integrated into the primary thread.', active: true },
+    { num: '04', title: 'Discharge', sub: null, desc: 'Intelligent discharge planning starts on day one, ensuring a prepared exit.' },
+    { num: '05', title: 'Recovery', sub: null, desc: 'Continuous remote monitoring and follow-up loops to prevent readmission.' },
+]
+
 export default function EndtoEndCarePage() {
+    const threadRef = useRef(null)
+    const noGapsRef = useRef(null)
+    const continuousRef = useRef(null)
+    const ctaRef = useRef(null)
+
+    const threadInView = useInView(threadRef, { once: true, amount: 0.2 })
+    const noGapsInView = useInView(noGapsRef, { once: true, amount: 0.25 })
+    const continuousInView = useInView(continuousRef, { once: true, amount: 0.25 })
+    const ctaInView = useInView(ctaRef, { once: true, amount: 0.25 })
+
     return (
         <PageLayout fullWidth={true}>
+            <style>{`
+                @keyframes connectionPulse {
+                    0%   { text-shadow: 0 0 0px rgba(0,105,112,0); }
+                    40%  { text-shadow: 0 0 18px rgba(0,105,112,0.5); }
+                    100% { text-shadow: 0 0 0px rgba(0,105,112,0); }
+                }
+                @keyframes statusDotPulse {
+                    0%, 100% { box-shadow: 0 0 0 0 rgba(0, 105, 112, 0.4); }
+                    50%       { box-shadow: 0 0 0 6px rgba(0, 105, 112, 0); }
+                }
+                @keyframes glassSwipe {
+                    0%   { left: -80%; }
+                    100% { left: 140%; }
+                }
+                @keyframes activeGlow {
+                    0%, 100% { box-shadow: 0px 8px 10px -6px rgba(0,0,0,0.10), 0px 20px 25px -5px rgba(0,0,0,0.10); }
+                    50%       { box-shadow: 0px 8px 10px -6px rgba(0,105,112,0.20), 0px 20px 40px -5px rgba(0,105,112,0.20); }
+                }
+                .btn-primary {
+                    transition: transform 0.15s ease, box-shadow 0.15s ease;
+                }
+                .btn-primary:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0px 16px 24px -6px rgba(0, 23, 54, 0.25);
+                }
+                .btn-primary:active { transform: scale(0.98); }
+                .btn-secondary {
+                    transition: transform 0.15s ease, outline-color 0.2s ease;
+                }
+                .btn-secondary:hover {
+                    transform: translateY(-2px);
+                    outline: 2px solid rgba(0,105,112,0.4);
+                    outline-offset: -2px;
+                }
+                .card-hover {
+                    transition: transform 0.18s ease, box-shadow 0.18s ease;
+                }
+                .card-hover:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0px 16px 32px -8px rgba(0,0,0,0.12);
+                }
+                .glass-card {
+                    position: relative;
+                    overflow: hidden;
+                }
+                .glass-card::after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: -80%;
+                    width: 50%;
+                    height: 100%;
+                    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+                    pointer-events: none;
+                    animation: glassSwipe 7s ease-in-out infinite;
+                    animation-delay: 2s;
+                }
+                .active-stage {
+                    animation: activeGlow 2.5s ease-in-out 1.2s 2;
+                }
+                .status-dot {
+                    animation: statusDotPulse 2s ease-in-out infinite;
+                }
+            `}</style>
 
             {/* ── Section 1: Hero ── */}
             <div style={{
@@ -33,17 +128,21 @@ export default function EndtoEndCarePage() {
                         flexDirection: 'column',
                         gap: 24,
                     }}>
-                        {/* Label */}
-                        <div style={{
-                            display: 'inline-flex',
-                            paddingLeft: 12,
-                            paddingRight: 12,
-                            paddingTop: 4,
-                            paddingBottom: 4,
-                            background: '#E7E8E9',
-                            borderRadius: 2,
-                            width: 'fit-content',
-                        }}>
+                        {/* Label — eyebrow-fade */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 8, filter: 'blur(4px)' }}
+                            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                            transition={{ duration: 0.5, ease: sharp }}
+                            style={{
+                                display: 'inline-flex',
+                                paddingLeft: 12,
+                                paddingRight: 12,
+                                paddingTop: 4,
+                                paddingBottom: 4,
+                                background: '#E7E8E9',
+                                borderRadius: 2,
+                                width: 'fit-content',
+                            }}>
                             <span style={{
                                 color: '#006970',
                                 fontSize: 12,
@@ -55,40 +154,64 @@ export default function EndtoEndCarePage() {
                             }}>
                                 End-to-End Care
                             </span>
+                        </motion.div>
+
+                        {/* Headline — journey-line-reveal */}
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            {heroLines.map((line, i) => (
+                                <div key={i} style={{ overflow: 'hidden' }}>
+                                    <motion.div
+                                        initial={{ opacity: 0, x: -24 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{
+                                            duration: 0.7,
+                                            ease: ease,
+                                            delay: 0.1 + i * 0.09,
+                                        }}
+                                        style={{
+                                            color: '#001736',
+                                            fontSize: 72,
+                                            fontFamily: 'Manrope, sans-serif',
+                                            fontWeight: 800,
+                                            lineHeight: '72px',
+                                            ...(line.last && {
+                                                animation: 'connectionPulse 1.4s ease-out 0.9s 1 forwards',
+                                                display: 'inline-block',
+                                            }),
+                                        }}
+                                    >
+                                        {line.text}
+                                    </motion.div>
+                                </div>
+                            ))}
                         </div>
 
-                        {/* Headline */}
-                        <div style={{
-                            color: '#001736',
-                            fontSize: 72,
-                            fontFamily: 'Manrope, sans-serif',
-                            fontWeight: 800,
-                            lineHeight: '72px',
-                        }}>
-                            From the first<br />
-                            contact to the last<br />
-                            follow-up. The<br />
-                            complete episode of<br />
-                            care, connected.
-                        </div>
-
-                        {/* Subtext */}
-                        <div style={{
-                            maxWidth: 672,
-                            paddingTop: 8,
-                            color: '#43474F',
-                            fontSize: 24,
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: 400,
-                            lineHeight: '32px',
-                        }}>
+                        {/* Subtext — soft-rise */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 16 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.7, ease: ease, delay: 0.6 }}
+                            style={{
+                                maxWidth: 672,
+                                paddingTop: 8,
+                                color: '#43474F',
+                                fontSize: 24,
+                                fontFamily: 'Inter, sans-serif',
+                                fontWeight: 400,
+                                lineHeight: '32px',
+                            }}>
                             ETOH is built around a simple architectural conviction: the
                             episode of care is one thing, not many.
-                        </div>
+                        </motion.div>
 
-                        {/* Button */}
-                        <div style={{ paddingTop: 16 }}>
-                            <button style={{
+                        {/* Button — button-rise */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, ease: sharp, delay: 0.75 }}
+                            style={{ paddingTop: 16 }}
+                        >
+                            <button className="btn-primary" style={{
                                 paddingLeft: 32,
                                 paddingRight: 32,
                                 paddingTop: 16,
@@ -110,19 +233,24 @@ export default function EndtoEndCarePage() {
                                 Explore the Platform
                                 <ArrowRight size={16} color="white" />
                             </button>
-                        </div>
+                        </motion.div>
                     </div>
 
-                    {/* Right: hero image with quote card */}
+                    {/* Right: hero image — panel-emerge */}
                     <div style={{
                         flex: '0 0 474px',
                         position: 'relative',
                     }}>
-                        <div style={{
-                            borderRadius: 8,
-                            overflow: 'hidden',
-                            boxShadow: '0px 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                        }}>
+                        {/* Blue panel */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            transition={{ duration: 0.9, ease: ease, delay: 0.3 }}
+                            style={{
+                                borderRadius: 8,
+                                overflow: 'hidden',
+                                boxShadow: '0px 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                            }}>
                             <img
                                 src={hero1}
                                 alt="End-to-End Care Platform"
@@ -133,26 +261,30 @@ export default function EndtoEndCarePage() {
                                     display: 'block',
                                 }}
                             />
-                        </div>
+                        </motion.div>
 
-                        {/* Quote card */}
-                        <div style={{
-                            position: 'absolute',
-                            left: -24,
-                            bottom: 107,
-                            maxWidth: 320,
-                            paddingTop: 24,
-                            paddingBottom: 24,
-                            paddingLeft: 24,
-                            paddingRight: 24,
-                            background: 'white',
-                            borderRadius: 4,
-                            borderLeft: '4px solid #006970',
-                            boxShadow: '0px 8px 10px -6px rgba(0, 0, 0, 0.10), 0px 20px 25px -5px rgba(0, 0, 0, 0.10)',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: 8,
-                        }}>
+                        {/* Quote card — note-dock */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 24 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.7, ease: ease, delay: 0.7 }}
+                            style={{
+                                position: 'absolute',
+                                left: -24,
+                                bottom: 107,
+                                maxWidth: 320,
+                                paddingTop: 24,
+                                paddingBottom: 24,
+                                paddingLeft: 24,
+                                paddingRight: 24,
+                                background: 'white',
+                                borderRadius: 4,
+                                borderLeft: '4px solid #006970',
+                                boxShadow: '0px 8px 10px -6px rgba(0, 0, 0, 0.10), 0px 20px 25px -5px rgba(0, 0, 0, 0.10)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: 8,
+                            }}>
                             <div style={{
                                 color: '#001736',
                                 fontSize: 16,
@@ -173,7 +305,7 @@ export default function EndtoEndCarePage() {
                             }}>
                                 — Dr. Elias Vance, Chief of<br />Operations
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
             </div>
@@ -186,322 +318,199 @@ export default function EndtoEndCarePage() {
                 background: '#F3F4F5',
                 boxSizing: 'border-box',
             }}>
-                <div style={{
-                    maxWidth: 1280,
-                    margin: '0 auto',
-                    paddingLeft: 24,
-                    paddingRight: 24,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 80,
-                }}>
+                <div
+                    ref={threadRef}
+                    style={{
+                        maxWidth: 1280,
+                        margin: '0 auto',
+                        paddingLeft: 24,
+                        paddingRight: 24,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 80,
+                    }}>
                     {/* Header */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-                        <div style={{
-                            color: '#001736',
-                            fontSize: 36,
-                            fontFamily: 'Manrope, sans-serif',
-                            fontWeight: 700,
-                            lineHeight: '40px',
-                        }}>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={threadInView ? { opacity: 1, y: 0 } : {}}
+                            transition={{ duration: 0.7, ease: ease }}
+                            style={{
+                                color: '#001736',
+                                fontSize: 36,
+                                fontFamily: 'Manrope, sans-serif',
+                                fontWeight: 700,
+                                lineHeight: '40px',
+                            }}>
                             The Single Thread
-                        </div>
-                        <div style={{
-                            maxWidth: 672,
-                            color: '#43474F',
-                            fontSize: 18,
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: 400,
-                            lineHeight: '28px',
-                        }}>
+                        </motion.div>
+                        <motion.div
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={threadInView ? { opacity: 1, y: 0 } : {}}
+                            transition={{ duration: 0.6, ease: ease, delay: 0.1 }}
+                            style={{
+                                maxWidth: 672,
+                                color: '#43474F',
+                                fontSize: 18,
+                                fontFamily: 'Inter, sans-serif',
+                                fontWeight: 400,
+                                lineHeight: '28px',
+                            }}>
                             A seamless architectural flow that transforms fragmented episodes into a
                             continuous, data-driven journey.
-                        </div>
+                        </motion.div>
                     </div>
 
-                    {/* Cards row */}
+                    {/* Cards row — stage-arrival */}
                     <div style={{ position: 'relative' }}>
-                        {/* Connecting line */}
-                        <div style={{
-                            position: 'absolute',
-                            left: 0,
-                            right: 0,
-                            top: 152,
-                            height: 4,
-                            opacity: 0.2,
-                            background: 'linear-gradient(90deg, #001736 0%, #006970 50%, #A9C7FF 100%)',
-                            zIndex: 0,
-                        }} />
+                        {/* thread-draw: connecting line */}
+                        <div style={{ position: 'absolute', left: 0, right: 0, top: 58, height: 2, overflow: 'hidden', zIndex: 0 }}>
+                            <motion.div
+                                initial={{ scaleX: 0 }}
+                                animate={threadInView ? { scaleX: 1 } : {}}
+                                transition={{ duration: 1.0, ease: sharp, delay: 0.1 }}
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    background: 'linear-gradient(90deg, #001736 0%, #006970 50%, #A9C7FF 100%)',
+                                    opacity: 0.15,
+                                    transformOrigin: 'left',
+                                }}
+                            />
+                        </div>
 
                         <div style={{
                             display: 'grid',
                             gridTemplateColumns: 'repeat(5, 1fr)',
-                            gap: 0,
+                            gap: 12,
                             position: 'relative',
                             zIndex: 1,
                         }}>
-                            {/* Card 1 — Pre-Admission */}
-                            <div style={{
-                                background: 'white',
-                                boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
-                                borderRadius: 4,
-                                padding: '34px 32px',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: 0,
-                                minHeight: 309,
-                            }}>
-                                <div style={{
-                                    width: 48,
-                                    height: 48,
-                                    background: '#001736',
-                                    borderRadius: 12,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    marginBottom: 24,
-                                }}>
-                                    <span style={{
-                                        color: 'white',
-                                        fontSize: 18,
-                                        fontFamily: 'Inter, sans-serif',
-                                        fontWeight: 700,
-                                        lineHeight: '28px',
-                                    }}>01</span>
-                                </div>
-                                <div style={{
-                                    color: '#001736',
-                                    fontSize: 20,
-                                    fontFamily: 'Manrope, sans-serif',
-                                    fontWeight: 700,
-                                    lineHeight: '28px',
-                                    marginBottom: 12,
-                                }}>
-                                    Pre-Admission
-                                </div>
-                                <div style={{
-                                    color: '#43474F',
-                                    fontSize: 14,
-                                    fontFamily: 'Inter, sans-serif',
-                                    fontWeight: 400,
-                                    lineHeight: '22px',
-                                }}>
-                                    Early data gathering and risk assessment before the patient even enters the facility.
-                                </div>
-                            </div>
-
-                            {/* Card 2 — Admission */}
-                            <div style={{
-                                background: 'white',
-                                boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
-                                borderRadius: 4,
-                                padding: '34px 32px',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: 0,
-                                minHeight: 309,
-                            }}>
-                                <div style={{
-                                    width: 48,
-                                    height: 48,
-                                    background: '#001736',
-                                    borderRadius: 12,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    marginBottom: 24,
-                                }}>
-                                    <span style={{
-                                        color: 'white',
-                                        fontSize: 18,
-                                        fontFamily: 'Inter, sans-serif',
-                                        fontWeight: 700,
-                                        lineHeight: '28px',
-                                    }}>02</span>
-                                </div>
-                                <div style={{
-                                    color: '#001736',
-                                    fontSize: 20,
-                                    fontFamily: 'Manrope, sans-serif',
-                                    fontWeight: 700,
-                                    lineHeight: '28px',
-                                    marginBottom: 8,
-                                }}>
-                                    Admission
-                                </div>
-                                <div style={{
-                                    color: '#006970',
-                                    fontSize: 12,
-                                    fontFamily: 'Inter, sans-serif',
-                                    fontWeight: 700,
-                                    textTransform: 'uppercase',
-                                    lineHeight: '16px',
-                                    letterSpacing: 1.2,
-                                    marginBottom: 12,
-                                }}>
-                                    Automated<br />Handoff
-                                </div>
-                                <div style={{
-                                    color: '#43474F',
-                                    fontSize: 14,
-                                    fontFamily: 'Inter, sans-serif',
-                                    fontWeight: 400,
-                                    lineHeight: '22px',
-                                }}>
-                                    Instant verification and record matching. No duplicate data entry required.
-                                </div>
-                            </div>
-
-                            {/* Card 3 — Inpatient Care (highlighted) */}
-                            <div style={{
-                                background: '#001736',
-                                borderRadius: 4,
-                                borderBottom: '4px solid #006970',
-                                padding: '34px 32px',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: 0,
-                                minHeight: 324,
-                                boxShadow: '0px 8px 10px -6px rgba(0, 0, 0, 0.10), 0px 20px 25px -5px rgba(0, 0, 0, 0.10)',
-                            }}>
-                                <div style={{
-                                    width: 50,
-                                    height: 50,
-                                    background: '#006970',
-                                    borderRadius: 12,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    marginBottom: 24,
-                                }}>
-                                    <span style={{
-                                        color: 'white',
-                                        fontSize: 18,
-                                        fontFamily: 'Inter, sans-serif',
-                                        fontWeight: 700,
-                                        lineHeight: '28px',
-                                    }}>03</span>
-                                </div>
-                                <div style={{
-                                    color: 'white',
-                                    fontSize: 20,
-                                    fontFamily: 'Manrope, sans-serif',
-                                    fontWeight: 700,
-                                    lineHeight: '28px',
-                                    marginBottom: 12,
-                                }}>
-                                    Inpatient Care
-                                </div>
-                                <div style={{
-                                    color: 'rgba(255,255,255,0.80)',
-                                    fontSize: 14,
-                                    fontFamily: 'Inter, sans-serif',
-                                    fontWeight: 400,
-                                    lineHeight: '22px',
-                                }}>
-                                    Dynamic clinical monitoring and diagnostics integrated into the primary thread.
-                                </div>
-                            </div>
-
-                            {/* Card 4 — Discharge */}
-                            <div style={{
-                                background: 'white',
-                                boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
-                                borderRadius: 4,
-                                padding: '34px 32px',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: 0,
-                                minHeight: 309,
-                            }}>
-                                <div style={{
-                                    width: 48,
-                                    height: 48,
-                                    background: '#001736',
-                                    borderRadius: 12,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    marginBottom: 24,
-                                }}>
-                                    <span style={{
-                                        color: 'white',
-                                        fontSize: 18,
-                                        fontFamily: 'Inter, sans-serif',
-                                        fontWeight: 700,
-                                        lineHeight: '28px',
-                                    }}>04</span>
-                                </div>
-                                <div style={{
-                                    color: '#001736',
-                                    fontSize: 20,
-                                    fontFamily: 'Manrope, sans-serif',
-                                    fontWeight: 700,
-                                    lineHeight: '28px',
-                                    marginBottom: 12,
-                                }}>
-                                    Discharge
-                                </div>
-                                <div style={{
-                                    color: '#43474F',
-                                    fontSize: 14,
-                                    fontFamily: 'Inter, sans-serif',
-                                    fontWeight: 400,
-                                    lineHeight: '22px',
-                                }}>
-                                    Intelligent discharge planning starts on day one, ensuring a prepared exit.
-                                </div>
-                            </div>
-
-                            {/* Card 5 — Recovery */}
-                            <div style={{
-                                background: 'white',
-                                boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
-                                borderRadius: 4,
-                                padding: '34px 32px',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: 0,
-                                minHeight: 309,
-                            }}>
-                                <div style={{
-                                    width: 48,
-                                    height: 48,
-                                    background: '#001736',
-                                    borderRadius: 12,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    marginBottom: 24,
-                                }}>
-                                    <span style={{
-                                        color: 'white',
-                                        fontSize: 18,
-                                        fontFamily: 'Inter, sans-serif',
-                                        fontWeight: 700,
-                                        lineHeight: '28px',
-                                    }}>05</span>
-                                </div>
-                                <div style={{
-                                    color: '#001736',
-                                    fontSize: 20,
-                                    fontFamily: 'Manrope, sans-serif',
-                                    fontWeight: 700,
-                                    lineHeight: '28px',
-                                    marginBottom: 12,
-                                }}>
-                                    Recovery
-                                </div>
-                                <div style={{
-                                    color: '#43474F',
-                                    fontSize: 14,
-                                    fontFamily: 'Inter, sans-serif',
-                                    fontWeight: 400,
-                                    lineHeight: '22px',
-                                }}>
-                                    Continuous remote monitoring and follow-up loops to prevent readmission.
-                                </div>
-                            </div>
+                            {stageCards.map((card, i) => (
+                                card.active ? (
+                                    /* Active card — active-stage-focus */
+                                    <motion.div
+                                        key={card.num}
+                                        initial={{ opacity: 0, y: 30, scale: 0.92 }}
+                                        animate={threadInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+                                        transition={{ duration: 0.75, ease: ease, delay: i * 0.12 }}
+                                        className="active-stage"
+                                        style={{
+                                            background: '#001736',
+                                            borderRadius: 12,
+                                            border: '1px solid rgba(0, 105, 112, 0.30)',
+                                            borderBottom: '4px solid #006970',
+                                            padding: '34px 32px',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            gap: 0,
+                                            minHeight: 324,
+                                            boxShadow: '0px 8px 10px -6px rgba(0, 0, 0, 0.10), 0px 20px 25px -5px rgba(0, 0, 0, 0.10)',
+                                        }}>
+                                        {/* Stage dot light */}
+                                        <div style={{ position: 'relative', marginBottom: 24 }}>
+                                            <div style={{
+                                                width: 50,
+                                                height: 50,
+                                                background: '#006970',
+                                                borderRadius: 12,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                            }}>
+                                                <span style={{
+                                                    color: 'white',
+                                                    fontSize: 18,
+                                                    fontFamily: 'Inter, sans-serif',
+                                                    fontWeight: 700,
+                                                    lineHeight: '28px',
+                                                }}>{card.num}</span>
+                                            </div>
+                                        </div>
+                                        <div style={{
+                                            color: 'white',
+                                            fontSize: 20,
+                                            fontFamily: 'Manrope, sans-serif',
+                                            fontWeight: 700,
+                                            lineHeight: '28px',
+                                            marginBottom: 12,
+                                        }}>{card.title}</div>
+                                        <div style={{
+                                            color: 'rgba(255,255,255,0.80)',
+                                            fontSize: 14,
+                                            fontFamily: 'Inter, sans-serif',
+                                            fontWeight: 400,
+                                            lineHeight: '22px',
+                                        }}>{card.desc}</div>
+                                    </motion.div>
+                                ) : (
+                                    /* Regular cards */
+                                    <motion.div
+                                        key={card.num}
+                                        initial={{ opacity: 0, y: 30, scale: 0.96 }}
+                                        animate={threadInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+                                        transition={{ duration: 0.65, ease: ease, delay: i * 0.12 }}
+                                        className="card-hover"
+                                        style={{
+                                            background: 'white',
+                                            boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)',
+                                            borderRadius: 12,
+                                            border: '1px solid rgba(196, 198, 208, 0.40)',
+                                            padding: '34px 32px',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            gap: 0,
+                                            minHeight: 309,
+                                        }}>
+                                        <div style={{
+                                            width: 48,
+                                            height: 48,
+                                            background: '#001736',
+                                            borderRadius: 12,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginBottom: 24,
+                                        }}>
+                                            <span style={{
+                                                color: 'white',
+                                                fontSize: 18,
+                                                fontFamily: 'Inter, sans-serif',
+                                                fontWeight: 700,
+                                                lineHeight: '28px',
+                                            }}>{card.num}</span>
+                                        </div>
+                                        <div style={{
+                                            color: '#001736',
+                                            fontSize: 20,
+                                            fontFamily: 'Manrope, sans-serif',
+                                            fontWeight: 700,
+                                            lineHeight: '28px',
+                                            marginBottom: card.sub ? 8 : 12,
+                                        }}>{card.title}</div>
+                                        {card.sub && (
+                                            <div style={{
+                                                color: '#006970',
+                                                fontSize: 12,
+                                                fontFamily: 'Inter, sans-serif',
+                                                fontWeight: 700,
+                                                textTransform: 'uppercase',
+                                                lineHeight: '16px',
+                                                letterSpacing: 1.2,
+                                                marginBottom: 12,
+                                                whiteSpace: 'pre-line',
+                                            }}>{card.sub}</div>
+                                        )}
+                                        <div style={{
+                                            color: '#43474F',
+                                            fontSize: 14,
+                                            fontFamily: 'Inter, sans-serif',
+                                            fontWeight: 400,
+                                            lineHeight: '22px',
+                                        }}>{card.desc}</div>
+                                    </motion.div>
+                                )
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -519,114 +528,114 @@ export default function EndtoEndCarePage() {
                 display: 'flex',
                 justifyContent: 'center',
             }}>
-                <div style={{
-                    maxWidth: 1232,
-                    width: '100%',
-                    display: 'flex',
-                    gap: 64,
-                    alignItems: 'center',
-                }}>
-                    {/* Left: text content */}
+                <div
+                    ref={noGapsRef}
+                    style={{
+                        maxWidth: 1232,
+                        width: '100%',
+                        display: 'flex',
+                        gap: 64,
+                        alignItems: 'center',
+                    }}>
+                    {/* Left: text content — point-stagger */}
                     <div style={{
                         flex: '0 0 520px',
                         display: 'flex',
                         flexDirection: 'column',
                         gap: 32,
                     }}>
-                        <div style={{
-                            color: '#001736',
-                            fontSize: 36,
-                            fontFamily: 'Manrope, sans-serif',
-                            fontWeight: 800,
-                            lineHeight: '45px',
-                        }}>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={noGapsInView ? { opacity: 1, y: 0 } : {}}
+                            transition={{ duration: 0.7, ease: ease }}
+                            style={{
+                                color: '#001736',
+                                fontSize: 36,
+                                fontFamily: 'Manrope, sans-serif',
+                                fontWeight: 800,
+                                lineHeight: '45px',
+                            }}>
                             No More Gaps. No More<br />Reconstructions.
-                        </div>
+                        </motion.div>
 
-                        {/* Feature 1 */}
-                        <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
-                            <div style={{
-                                width: 48,
-                                height: 48,
-                                flexShrink: 0,
-                                background: 'rgba(0, 105, 112, 0.10)',
-                                borderRadius: 12,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}>
-                                <DatabaseZap size={20} color="#006970" strokeWidth={1.5} />
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                                <div style={{
-                                    color: '#001736',
-                                    fontSize: 20,
-                                    fontFamily: 'Manrope, sans-serif',
-                                    fontWeight: 700,
-                                    lineHeight: '28px',
-                                }}>
-                                    Zero Data Drift
+                        {[
+                            {
+                                Icon: DatabaseZap,
+                                title: 'Zero Data Drift',
+                                desc: 'Patients never carry information between departments. The platform ensures that diagnostic data from radiology flows as seamlessly as the initial triage report.',
+                            },
+                            {
+                                Icon: Lock,
+                                title: 'Immutable Integrity',
+                                desc: "The clinical record is never reconstructed. It is a persistent digital asset that matures with the patient's journey, maintaining absolute clinical context.",
+                            },
+                        ].map((item, i) => (
+                            <motion.div
+                                key={item.title}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={noGapsInView ? { opacity: 1, x: 0 } : {}}
+                                transition={{ duration: 0.65, ease: ease, delay: 0.15 + i * 0.12 }}
+                                style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}
+                            >
+                                <motion.div
+                                    initial={{ scale: 0.7, opacity: 0 }}
+                                    animate={noGapsInView ? { scale: 1, opacity: 1 } : {}}
+                                    transition={{ duration: 0.4, ease: ease, delay: 0.2 + i * 0.12 }}
+                                    style={{
+                                        width: 48,
+                                        height: 48,
+                                        flexShrink: 0,
+                                        background: 'rgba(0, 105, 112, 0.10)',
+                                        borderRadius: 12,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    }}>
+                                    <item.Icon size={20} color="#006970" strokeWidth={1.5} />
+                                </motion.div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                    <motion.div
+                                        initial={{ opacity: 0, x: -12 }}
+                                        animate={noGapsInView ? { opacity: 1, x: 0 } : {}}
+                                        transition={{ duration: 0.5, ease: sharp, delay: 0.25 + i * 0.12 }}
+                                        style={{
+                                            color: '#001736',
+                                            fontSize: 20,
+                                            fontFamily: 'Manrope, sans-serif',
+                                            fontWeight: 700,
+                                            lineHeight: '28px',
+                                        }}>
+                                        {item.title}
+                                    </motion.div>
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={noGapsInView ? { opacity: 1 } : {}}
+                                        transition={{ duration: 0.5, ease: sharp, delay: 0.35 + i * 0.12 }}
+                                        style={{
+                                            color: '#43474F',
+                                            fontSize: 16,
+                                            fontFamily: 'Inter, sans-serif',
+                                            fontWeight: 400,
+                                            lineHeight: '24px',
+                                        }}>
+                                        {item.desc}
+                                    </motion.div>
                                 </div>
-                                <div style={{
-                                    color: '#43474F',
-                                    fontSize: 16,
-                                    fontFamily: 'Inter, sans-serif',
-                                    fontWeight: 400,
-                                    lineHeight: '24px',
-                                }}>
-                                    Patients never carry information between departments. The
-                                    platform ensures that diagnostic data from radiology flows as
-                                    seamlessly as the initial triage report.
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Feature 2 */}
-                        <div style={{ display: 'flex', gap: 24, alignItems: 'flex-start' }}>
-                            <div style={{
-                                width: 48,
-                                height: 48,
-                                flexShrink: 0,
-                                background: 'rgba(0, 105, 112, 0.10)',
-                                borderRadius: 12,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                            }}>
-                                <Lock size={20} color="#006970" strokeWidth={1.5} />
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                                <div style={{
-                                    color: '#001736',
-                                    fontSize: 20,
-                                    fontFamily: 'Manrope, sans-serif',
-                                    fontWeight: 700,
-                                    lineHeight: '28px',
-                                }}>
-                                    Immutable Integrity
-                                </div>
-                                <div style={{
-                                    color: '#43474F',
-                                    fontSize: 16,
-                                    fontFamily: 'Inter, sans-serif',
-                                    fontWeight: 400,
-                                    lineHeight: '24px',
-                                }}>
-                                    The clinical record is never reconstructed. It is a persistent digital
-                                    asset that matures with the patient&apos;s journey, maintaining absolute
-                                    clinical context.
-                                </div>
-                            </div>
-                        </div>
+                            </motion.div>
+                        ))}
                     </div>
 
-                    {/* Right: UI mockup image */}
-                    <div style={{
-                        flex: 1,
-                        padding: 8,
-                        background: '#E7E8E9',
-                        borderRadius: 8,
-                    }}>
+                    {/* Right: UI mockup — frame-build */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 30 }}
+                        animate={noGapsInView ? { opacity: 1, x: 0 } : {}}
+                        transition={{ duration: 0.8, ease: ease, delay: 0.2 }}
+                        style={{
+                            flex: 1,
+                            padding: 8,
+                            background: '#E7E8E9',
+                            borderRadius: 8,
+                        }}>
                         <div style={{
                             background: 'white',
                             borderRadius: 4,
@@ -638,6 +647,7 @@ export default function EndtoEndCarePage() {
                             flexDirection: 'column',
                             gap: 0,
                             overflow: 'hidden',
+                            position: 'relative',
                         }}>
                             <img
                                 src={endEndImg}
@@ -648,8 +658,18 @@ export default function EndtoEndCarePage() {
                                     borderRadius: 2,
                                 }}
                             />
+                            {/* status-dot-pulse */}
+                            <div style={{
+                                position: 'absolute',
+                                bottom: 20,
+                                right: 20,
+                                width: 10,
+                                height: 10,
+                                borderRadius: '50%',
+                                background: '#006970',
+                            }} className="status-dot" />
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
             </div>
 
@@ -663,66 +683,72 @@ export default function EndtoEndCarePage() {
                 overflow: 'hidden',
                 boxSizing: 'border-box',
             }}>
-                <div style={{
-                    maxWidth: 1280,
-                    margin: '0 auto',
-                    paddingLeft: 24,
-                    paddingRight: 24,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 80,
-                    position: 'relative',
-                    zIndex: 1,
-                }}>
-                    {/* Header */}
-                    <div style={{
+                <div
+                    ref={continuousRef}
+                    style={{
+                        maxWidth: 1280,
+                        margin: '0 auto',
+                        paddingLeft: 24,
+                        paddingRight: 24,
                         display: 'flex',
                         flexDirection: 'column',
-                        alignItems: 'center',
-                        gap: 24,
+                        gap: 80,
+                        position: 'relative',
+                        zIndex: 1,
                     }}>
-                        <div style={{
-                            color: 'white',
-                            fontSize: 48,
-                            fontFamily: 'Manrope, sans-serif',
-                            fontWeight: 700,
-                            lineHeight: '48px',
-                            textAlign: 'center',
-                        }}>
+                    {/* Header — headline-rise */}
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24 }}>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={continuousInView ? { opacity: 1, y: 0 } : {}}
+                            transition={{ duration: 0.8, ease: ease }}
+                            style={{
+                                color: 'white',
+                                fontSize: 48,
+                                fontFamily: 'Manrope, sans-serif',
+                                fontWeight: 700,
+                                lineHeight: '48px',
+                                textAlign: 'center',
+                            }}>
                             Continuous Care
-                        </div>
-                        <div style={{
-                            maxWidth: 768,
-                            color: '#A9C7FF',
-                            fontSize: 20,
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: 400,
-                            lineHeight: '32px',
-                            textAlign: 'center',
-                        }}>
+                        </motion.div>
+                        {/* soft-fade */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={continuousInView ? { opacity: 1 } : {}}
+                            transition={{ duration: 0.8, ease: ease, delay: 0.2 }}
+                            style={{
+                                maxWidth: 768,
+                                color: '#A9C7FF',
+                                fontSize: 20,
+                                fontFamily: 'Inter, sans-serif',
+                                fontWeight: 400,
+                                lineHeight: '32px',
+                                textAlign: 'center',
+                            }}>
                             The transition home is not a cliff edge, but a continuation of hospital care. ETOH
                             bridges the gap between clinical supervision and home recovery.
-                        </div>
+                        </motion.div>
                     </div>
 
-                    {/* Two cards */}
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr',
-                        gap: 24,
-                    }}>
-                        {/* Card 1 */}
-                        <div style={{
-                            padding: '47px 41px',
-                            background: 'rgba(255, 255, 255, 0.05)',
-                            borderRadius: 8,
-                            outline: '1px rgba(255, 255, 255, 0.10) solid',
-                            outlineOffset: -1,
-                            backdropFilter: 'blur(6px)',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: 0,
-                        }}>
+                    {/* Two cards — care-card-left / care-card-right */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+                        <motion.div
+                            initial={{ opacity: 0, x: -40 }}
+                            animate={continuousInView ? { opacity: 1, x: 0 } : {}}
+                            transition={{ duration: 0.8, ease: ease, delay: 0.2 }}
+                            className="glass-card"
+                            style={{
+                                padding: '47px 41px',
+                                background: 'rgba(255, 255, 255, 0.05)',
+                                borderRadius: 8,
+                                outline: '1px rgba(255, 255, 255, 0.10) solid',
+                                outlineOffset: -1,
+                                backdropFilter: 'blur(6px)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: 0,
+                            }}>
                             <div style={{
                                 width: 48,
                                 height: 48,
@@ -758,20 +784,24 @@ export default function EndtoEndCarePage() {
                                 alerting clinical teams to early markers of regression before they become
                                 emergencies.
                             </div>
-                        </div>
+                        </motion.div>
 
-                        {/* Card 2 */}
-                        <div style={{
-                            padding: '47px 41px',
-                            background: 'rgba(255, 255, 255, 0.05)',
-                            borderRadius: 8,
-                            outline: '1px rgba(255, 255, 255, 0.10) solid',
-                            outlineOffset: -1,
-                            backdropFilter: 'blur(6px)',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: 0,
-                        }}>
+                        <motion.div
+                            initial={{ opacity: 0, x: 40 }}
+                            animate={continuousInView ? { opacity: 1, x: 0 } : {}}
+                            transition={{ duration: 0.8, ease: ease, delay: 0.35 }}
+                            className="glass-card"
+                            style={{
+                                padding: '47px 41px',
+                                background: 'rgba(255, 255, 255, 0.05)',
+                                borderRadius: 8,
+                                outline: '1px rgba(255, 255, 255, 0.10) solid',
+                                outlineOffset: -1,
+                                backdropFilter: 'blur(6px)',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: 0,
+                            }}>
                             <div style={{
                                 width: 48,
                                 height: 48,
@@ -807,12 +837,12 @@ export default function EndtoEndCarePage() {
                                 &quot;care&quot; doesn&apos;t end when the patient leaves the ward. We extend
                                 the clinical perimeter.
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
             </div>
 
-            {/* ── Section 5: CTA ── */}
+            {/* ── Section 5: CTA — cta-build ── */}
             <div style={{
                 width: '100%',
                 paddingTop: 128,
@@ -822,38 +852,59 @@ export default function EndtoEndCarePage() {
                 display: 'flex',
                 justifyContent: 'center',
             }}>
-                <div style={{
-                    maxWidth: 896,
-                    paddingLeft: 24,
-                    paddingRight: 24,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: 40,
-                }}>
-                    <div style={{
-                        color: '#001736',
-                        fontSize: 60,
-                        fontFamily: 'Manrope, sans-serif',
-                        fontWeight: 800,
-                        lineHeight: '60px',
-                        textAlign: 'center',
+                <div
+                    ref={ctaRef}
+                    style={{
+                        maxWidth: 896,
+                        paddingLeft: 24,
+                        paddingRight: 24,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: 40,
                     }}>
-                        Connect Every Stage.<br />Eliminate Every Gap.
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                        {['Connect Every Stage.', 'Eliminate Every Gap.'].map((line, i) => (
+                            <div key={line} style={{ overflow: 'hidden' }}>
+                                <motion.div
+                                    initial={{ opacity: 0, y: 28 }}
+                                    animate={ctaInView ? { opacity: 1, y: 0 } : {}}
+                                    transition={{
+                                        duration: i === 0 ? 0.7 : 0.8,
+                                        ease: i === 0 ? ease : [0.16, 1, 0.3, 1],
+                                        delay: i * 0.14,
+                                    }}
+                                    style={{
+                                        color: '#001736',
+                                        fontSize: 60,
+                                        fontFamily: 'Manrope, sans-serif',
+                                        fontWeight: 800,
+                                        lineHeight: '64px',
+                                        textAlign: 'center',
+                                    }}>
+                                    {line}
+                                </motion.div>
+                            </div>
+                        ))}
                     </div>
 
-                    <div style={{
-                        color: '#43474F',
-                        fontSize: 20,
-                        fontFamily: 'Inter, sans-serif',
-                        fontWeight: 400,
-                        lineHeight: '32px',
-                        textAlign: 'center',
-                    }}>
+                    <motion.div
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={ctaInView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 0.6, ease: ease, delay: 0.3 }}
+                        style={{
+                            color: '#43474F',
+                            fontSize: 20,
+                            fontFamily: 'Inter, sans-serif',
+                            fontWeight: 400,
+                            lineHeight: '32px',
+                            textAlign: 'center',
+                        }}>
                         Ready to transform your clinical workflow into a single, seamless thread of operational
                         excellence? See ETOH in action.
-                    </div>
+                    </motion.div>
 
+                    {/* button-stagger */}
                     <div style={{
                         paddingTop: 8,
                         display: 'flex',
@@ -862,41 +913,35 @@ export default function EndtoEndCarePage() {
                         flexWrap: 'wrap',
                         justifyContent: 'center',
                     }}>
-                        <button style={{
-                            paddingLeft: 40,
-                            paddingRight: 40,
-                            paddingTop: 20,
-                            paddingBottom: 20,
-                            background: '#001736',
-                            borderRadius: 6,
-                            border: 'none',
-                            cursor: 'pointer',
-                            color: 'white',
-                            fontSize: 16,
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: 700,
-                            lineHeight: '24px',
-                            boxShadow: '0px 25px 50px -12px rgba(0, 23, 54, 0.20)',
-                        }}>
-                            Request Technical Demo
-                        </button>
-                        <button style={{
-                            paddingLeft: 40,
-                            paddingRight: 40,
-                            paddingTop: 20,
-                            paddingBottom: 20,
-                            background: '#E7E8E9',
-                            borderRadius: 6,
-                            border: 'none',
-                            cursor: 'pointer',
-                            color: '#001736',
-                            fontSize: 16,
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: 700,
-                            lineHeight: '24px',
-                        }}>
-                            View Clinical Whitepaper
-                        </button>
+                        {[
+                            { label: 'Request Technical Demo', primary: true },
+                            { label: 'View Clinical Whitepaper', primary: false },
+                        ].map((btn, i) => (
+                            <motion.button
+                                key={btn.label}
+                                initial={{ opacity: 0, y: 16 }}
+                                animate={ctaInView ? { opacity: 1, y: 0 } : {}}
+                                transition={{ duration: 0.5, ease: sharp, delay: 0.45 + i * 0.12 }}
+                                className={btn.primary ? 'btn-primary' : 'btn-secondary'}
+                                style={{
+                                    paddingLeft: 40,
+                                    paddingRight: 40,
+                                    paddingTop: 20,
+                                    paddingBottom: 20,
+                                    background: btn.primary ? '#001736' : '#E7E8E9',
+                                    borderRadius: 6,
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    color: btn.primary ? 'white' : '#001736',
+                                    fontSize: 16,
+                                    fontFamily: 'Inter, sans-serif',
+                                    fontWeight: 700,
+                                    lineHeight: '24px',
+                                    boxShadow: btn.primary ? '0px 25px 50px -12px rgba(0, 23, 54, 0.20)' : 'none',
+                                }}>
+                                {btn.label}
+                            </motion.button>
+                        ))}
                     </div>
                 </div>
             </div>

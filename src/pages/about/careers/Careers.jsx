@@ -140,7 +140,7 @@ export default function CareersPage() {
 
                 {/* Content */}
                 <div ref={heroRef} style={{
-                    width: '100%',
+                    width: isMobile ? '100%' : 'calc(100% - 120px)',
                     marginLeft: isMobile ? 0 : 120,
                     flexDirection: 'column',
                     justifyContent: 'flex-start',

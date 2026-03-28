@@ -1,169 +1,576 @@
+import { useRef, useState, useEffect, useCallback } from 'react'
+import { motion, useInView } from 'framer-motion'
 import PageLayout from '../../../components/PageLayout'
 
+const ease = [0.22, 1, 0.36, 1]
+const sharp = [0.25, 0.46, 0.45, 0.94]
+
+// ── typewriter headline: types the full headline line by line ────────────────
+const HEADLINE_LINES = [
+    'We operate at scale. That',
+    'vantage point produces',
+    'knowledge no analyst can',
+    'manufacture from the',
+    'outside.',
+]
+const HEADLINE_FULL = HEADLINE_LINES.join('\n')
+
+function TypewriterHeadline() {
+    const [count, setCount]           = useState(0)
+    const [showCursor, setShowCursor] = useState(true)
+    const [cursorFading, setCursorFading] = useState(false)
+    const startedRef = useRef(false)
+
+    useEffect(() => {
+        if (startedRef.current) return
+        startedRef.current = true
+
+        let cumulative = 150  // brief pause before typing starts
+        for (let i = 0; i < HEADLINE_FULL.length; i++) {
+            const ch   = HEADLINE_FULL[i]
+            const prev = i > 0 ? HEADLINE_FULL[i - 1] : ''
+            let delay  = 28
+            if (ch === '\n') delay = 80          // pause at line breaks
+            if (prev === '.') delay += 220        // longer pause after sentence
+            if (prev === ',') delay += 100
+            cumulative += delay;
+            ((idx, ms) => setTimeout(() => setCount(idx + 1), ms))(i, cumulative)
+        }
+        // cursor fades out after typing ends
+        setTimeout(() => setCursorFading(true), cumulative + 1400)
+        setTimeout(() => setShowCursor(false),  cumulative + 2200)
+    }, [])
+
+    // Split typed text back into lines for rendering
+    const typed = HEADLINE_FULL.slice(0, count)
+    const lines  = typed.split('\n')
+    // Pad to always render all 5 line slots so layout doesn't jump
+    while (lines.length < HEADLINE_LINES.length) lines.push('')
+
+    return (
+        <>
+            {lines.map((line, i) => (
+                <span key={i} style={{ display: 'block' }}>
+                    {line}
+                    {/* cursor sits after last char on the active line */}
+                    {i === lines.length - 1 && showCursor && (
+                        <span style={{
+                            display: 'inline-block',
+                            width: 0,
+                            borderRight: '3px solid #1FC9C3',
+                            height: '0.82em',
+                            verticalAlign: 'text-bottom',
+                            marginLeft: 4,
+                            opacity: cursorFading ? 0 : 1,
+                            transition: cursorFading ? 'opacity 0.8s ease' : 'none',
+                            animation: !cursorFading ? 'cursorBlink 0.75s ease-in-out infinite' : 'none',
+                        }} />
+                    )}
+                </span>
+            ))}
+        </>
+    )
+}
+
+// ── metric-count: animates 0 → end ──────────────────────────────────────────
+function CountUp({ end, duration = 1.2, active, decimals = 0, suffix = '' }) {
+    const [value, setValue] = useState(0)
+    const startedRef = useRef(false)
+
+    useEffect(() => {
+        if (!active || startedRef.current) return
+        startedRef.current = true
+        const startTime = performance.now()
+        const tick = (now) => {
+            const t = Math.min((now - startTime) / (duration * 1000), 1)
+            const eased = 1 - Math.pow(1 - t, 3)
+            setValue(parseFloat((end * eased).toFixed(decimals)))
+            if (t < 1) requestAnimationFrame(tick)
+            else setValue(end)
+        }
+        requestAnimationFrame(tick)
+    }, [active])
+
+    return <>{decimals > 0 ? value.toFixed(decimals) : value}{suffix}</>
+}
+
+// ────────────────────────────────────────────────────────────────────────────
 export default function InsightsPage() {
+    const sectionHeaderRef = useRef(null)
+    const metricCardRef    = useRef(null)
+    const lowerGridRef     = useRef(null)
+    const rightCardsRef    = useRef(null)
+    const accessRef        = useRef(null)
+    const hubRef           = useRef(null)
+
+    const sectionHeaderInView = useInView(sectionHeaderRef, { once: true, amount: 0.4 })
+    const metricCardInView    = useInView(metricCardRef,    { once: true, amount: 0.3 })
+    const lowerGridInView     = useInView(lowerGridRef,     { once: true, amount: 0.2 })
+    const rightCardsInView    = useInView(rightCardsRef,    { once: true, amount: 0.15 })
+    const accessInView        = useInView(accessRef,        { once: true, amount: 0.2 })
+
+    // hub parallax state
+    const [hubXY, setHubXY] = useState({ x: 0, y: 0 })
+    const handleHubMove  = useCallback((e) => {
+        const r = hubRef.current?.getBoundingClientRect()
+        if (!r) return
+        setHubXY({
+            x: ((e.clientX - r.left - r.width  / 2) / r.width)  * 8,
+            y: ((e.clientY - r.top  - r.height / 2) / r.height) * 6,
+        })
+    }, [])
+    const handleHubLeave = useCallback(() => setHubXY({ x: 0, y: 0 }), [])
+
     return (
         <PageLayout title="" fullWidth={true}>
+            {/* ── global styles ── */}
+            <style>{`
+                @keyframes glassSweep {
+                    0%   { left: -70%; }
+                    100% { left: 140%; }
+                }
+                @keyframes nodePulse {
+                    0%, 100% { box-shadow: 0 0 0 0   rgba(31,201,195,0);    }
+                    50%       { box-shadow: 0 0 0 10px rgba(31,201,195,0.18); }
+                }
+                @keyframes underlineExpand {
+                    from { width: 0; }
+                    to   { width: 100%; }
+                }
+                @keyframes cursorBlink {
+                    0%, 100% { opacity: 1; }
+                    50%      { opacity: 0; }
+                }
+
+                /* glass-sweep on dark cards */
+                .dark-intel-card { position: relative; overflow: hidden; }
+                .dark-intel-card::after {
+                    content: '';
+                    position: absolute; top: 0; left: -70%;
+                    width: 50%; height: 100%;
+                    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+                    pointer-events: none;
+                    animation: glassSweep 8s ease-in-out infinite;
+                    animation-delay: 2s;
+                }
+
+                /* hover-raise on white cards */
+                .hover-raise {
+                    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+                    cursor: default;
+                }
+                .hover-raise:hover {
+                    transform: translateY(-6px);
+                    box-shadow: 0px 20px 40px -8px rgba(0,0,0,0.11);
+                }
+                .hover-raise-border:hover {
+                    border-color: rgba(0,105,112,0.35) !important;
+                }
+
+                /* node-activate pulse on dark card icon */
+                .node-pulse {
+                    animation: nodePulse 3.5s ease-in-out infinite;
+                    animation-delay: 2.2s;
+                    border-radius: 50%;
+                    display: inline-flex;
+                }
+
+                /* active teal tab underline */
+                .tab-active {
+                    position: relative;
+                    display: inline-block;
+                }
+                .tab-active::after {
+                    content: '';
+                    position: absolute; bottom: -4px; left: 0;
+                    height: 2px; background: #006970;
+                    animation: underlineExpand 0.45s ease forwards;
+                    animation-delay: 0.5s;
+                    width: 0;
+                }
+
+                /* arrow-shift on Q3 footer */
+                .arrow-shift { display: flex; align-items: center; }
+                .arrow-shift svg { transition: transform 0.18s ease; }
+                .arrow-shift:hover svg { transform: translateX(5px); }
+
+                /* button hovers */
+                .btn-dark  { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+                .btn-dark:hover  { transform: translateY(-2px); box-shadow: 0 8px 20px -4px rgba(0,23,54,0.35); }
+                .btn-ghost { transition: transform 0.15s ease, outline-color 0.2s ease; }
+                .btn-ghost:hover { transform: translateY(-2px); outline-color: rgba(0,105,112,0.45) !important; }
+            `}</style>
+
             <div style={{ paddingLeft: 24, paddingRight: 24 }}>
 
-                {/* Section 1 — Hero */}
-                <div style={{ paddingTop: 80, paddingBottom: 96, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 24, display: 'flex' }}>
-                    <div style={{ paddingLeft: 12, paddingRight: 12, paddingTop: 4, paddingBottom: 4, background: '#96F1FA', borderRadius: 12, justifyContent: 'flex-start', alignItems: 'center', display: 'inline-flex' }}>
-                        <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#006F77', fontSize: 10, fontFamily: 'Inter', fontWeight: '700', textTransform: 'uppercase', lineHeight: '15px', letterSpacing: 2, wordWrap: 'break-word' }}>Proprietary Vantage</div>
+                {/* ══ SECTION 1 — Hero ══════════════════════════════════════════ */}
+                <div style={{ paddingTop: 80, paddingBottom: 96, display: 'flex', flexDirection: 'column', gap: 24 }}>
+
+                    {/* Badge */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 8, filter: 'blur(4px)' }}
+                        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                        transition={{ duration: 0.45, ease: sharp }}
+                        style={{ paddingLeft: 12, paddingRight: 12, paddingTop: 4, paddingBottom: 4, background: '#96F1FA', borderRadius: 12, display: 'inline-flex' }}
+                    >
+                        <span style={{ color: '#006F77', fontSize: 10, fontFamily: 'Inter', fontWeight: 700, textTransform: 'uppercase', lineHeight: '15px', letterSpacing: 2 }}>
+                            Proprietary Vantage
+                        </span>
+                    </motion.div>
+
+                    {/* typing headline */}
+                    <div style={{ paddingBottom: 8 }}>
+                        <h1 style={{ margin: 0, color: '#001736', fontSize: 72, fontFamily: 'Manrope', fontWeight: 800, lineHeight: '72px', minHeight: '360px' }}>
+                            <TypewriterHeadline />
+                        </h1>
                     </div>
-                    <div style={{ paddingBottom: 8, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex' }}>
-                        <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#001736', fontSize: 72, fontFamily: 'Manrope', fontWeight: '800', lineHeight: '72px', wordWrap: 'break-word' }}>We operate at scale. That<br />vantage point produces<br />knowledge no analyst can<br />manufacture from the<br />outside.</div>
-                    </div>
-                    <div style={{ width: 96, height: 4, background: '#006970' }} />
+
+                    {/* signal-draw: teal line width 0 → 96, fires after typing */}
+                    <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: 96 }}
+                        transition={{ duration: 0.65, ease: ease, delay: 4.2 }}
+                        style={{ height: 4, background: '#006970' }}
+                    />
                 </div>
 
-                {/* Section 2 — Two column: System Intelligence + Clinical Perspectives */}
-                <div style={{ alignSelf: 'stretch', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 32, paddingBottom: 96 }}>
+                {/* ══ SECTION 2 — Two columns ═══════════════════════════════════ */}
+                <div style={{ display: 'flex', flexDirection: 'row', gap: 32, paddingBottom: 96 }}>
 
-                    {/* Left column — System Intelligence */}
-                    <div style={{ flex: 1.4, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 32, display: 'flex' }}>
-                        <div style={{ alignSelf: 'stretch', justifyContent: 'space-between', alignItems: 'baseline', display: 'flex' }}>
-                            <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#001736', fontSize: 24, fontFamily: 'Manrope', fontWeight: '700', lineHeight: '32px', wordWrap: 'break-word' }}>System Intelligence</div>
-                            <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#006970', fontSize: 12, fontFamily: 'Inter', fontWeight: '600', textTransform: 'uppercase', lineHeight: '16px', letterSpacing: 1.20, wordWrap: 'break-word' }}>Real-time Operational Flow</div>
+                    {/* ── Left column ─────────────────────────────────── */}
+                    <div ref={sectionHeaderRef} style={{ flex: 1.4, display: 'flex', flexDirection: 'column', gap: 32 }}>
+
+                        {/* tab-fade: section headers */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                            <motion.span
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={sectionHeaderInView ? { opacity: 1, y: 0 } : {}}
+                                transition={{ duration: 0.4, ease: sharp }}
+                                style={{ color: '#001736', fontSize: 24, fontFamily: 'Manrope', fontWeight: 700, lineHeight: '32px' }}
+                            >
+                                System Intelligence
+                            </motion.span>
+                            <motion.span
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={sectionHeaderInView ? { opacity: 1, y: 0 } : {}}
+                                transition={{ duration: 0.4, ease: sharp, delay: 0.1 }}
+                                className={sectionHeaderInView ? 'tab-active' : ''}
+                                style={{ color: '#006970', fontSize: 12, fontFamily: 'Inter', fontWeight: 600, textTransform: 'uppercase', lineHeight: '16px', letterSpacing: 1.20 }}
+                            >
+                                Real-time Operational Flow
+                            </motion.span>
                         </div>
 
-                        {/* Main metric card */}
-                        <div style={{ alignSelf: 'stretch', position: 'relative', background: 'white', boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)', overflow: 'hidden', borderRadius: 8, borderLeft: '2px #006970 solid', padding: 34 }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 64 }}>
-                                <div style={{ padding: 16, background: '#E7E8E9', borderRadius: 4, display: 'inline-flex' }}>
-                                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <ellipse cx="11" cy="6" rx="9" ry="4" stroke="#001736" strokeWidth="1.5" />
-                                        <path d="M2 6v5c0 2.21 4.03 4 9 4s9-1.79 9-4V6" stroke="#001736" strokeWidth="1.5" />
-                                        <path d="M2 11v5c0 2.21 4.03 4 9 4s9-1.79 9-4v-5" stroke="#001736" strokeWidth="1.5" />
-                                    </svg>
+                        {/* ── Main metric card — dashboard wake-up ── */}
+                        <div ref={metricCardRef}>
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={metricCardInView ? { opacity: 1, y: 0 } : {}}
+                                transition={{ duration: 0.6, ease: ease }}
+                                className="hover-raise hover-raise-border"
+                                style={{ position: 'relative', background: 'white', boxShadow: '0px 1px 2px rgba(0,0,0,0.05)', overflow: 'hidden', borderRadius: 8, padding: 34, borderLeft: '2px transparent solid' }}
+                            >
+                                {/* border-grow: left teal bar scaleY 0 → 1 */}
+                                <motion.div
+                                    initial={{ scaleY: 0 }}
+                                    animate={metricCardInView ? { scaleY: 1 } : {}}
+                                    transition={{ duration: 0.55, ease: 'easeOut', delay: 0.15 }}
+                                    style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 2, background: '#006970', transformOrigin: 'top', borderRadius: '2px 0 0 2px' }}
+                                />
+
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 64 }}>
+                                    {/* icon appears */}
+                                    <motion.div
+                                        initial={{ opacity: 0, scale: 0.75 }}
+                                        animate={metricCardInView ? { opacity: 1, scale: 1 } : {}}
+                                        transition={{ duration: 0.4, ease: ease, delay: 0.3 }}
+                                        style={{ padding: 16, background: '#E7E8E9', borderRadius: 4, display: 'inline-flex' }}
+                                    >
+                                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                                            <ellipse cx="11" cy="6" rx="9" ry="4" stroke="#001736" strokeWidth="1.5" />
+                                            <path d="M2 6v5c0 2.21 4.03 4 9 4s9-1.79 9-4V6" stroke="#001736" strokeWidth="1.5" />
+                                            <path d="M2 11v5c0 2.21 4.03 4 9 4s9-1.79 9-4v-5" stroke="#001736" strokeWidth="1.5" />
+                                        </svg>
+                                    </motion.div>
+
+                                    {/* metric-count 0 → 94.2% */}
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={metricCardInView ? { opacity: 1 } : {}}
+                                        transition={{ duration: 0.3, delay: 0.42 }}
+                                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}
+                                    >
+                                        <span style={{ textAlign: 'right', color: '#001736', fontSize: 36, fontFamily: 'Manrope', fontWeight: 900, lineHeight: '40px' }}>
+                                            <CountUp end={94.2} duration={1.2} active={metricCardInView} decimals={1} suffix="%" />
+                                        </span>
+                                        <span style={{ textAlign: 'right', color: '#43474F', fontSize: 10, fontFamily: 'Inter', fontWeight: 700, textTransform: 'uppercase', lineHeight: '15px' }}>
+                                            Standardization Index
+                                        </span>
+                                    </motion.div>
                                 </div>
-                                <div style={{ flexDirection: 'column', alignItems: 'flex-end', display: 'flex' }}>
-                                    <div style={{ textAlign: 'right', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#001736', fontSize: 36, fontFamily: 'Manrope', fontWeight: '900', lineHeight: '40px', wordWrap: 'break-word' }}>94.2%</div>
-                                    <div style={{ textAlign: 'right', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#43474F', fontSize: 10, fontFamily: 'Inter', fontWeight: '700', textTransform: 'uppercase', lineHeight: '15px', wordWrap: 'break-word' }}>Standardization Index</div>
+
+                                {/* body text fades in */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 8 }}
+                                    animate={metricCardInView ? { opacity: 1, y: 0 } : {}}
+                                    transition={{ duration: 0.5, ease: sharp, delay: 0.58 }}
+                                >
+                                    <div style={{ marginBottom: 12, color: '#001736', fontSize: 20, fontFamily: 'Manrope', fontWeight: 700, lineHeight: '28px' }}>
+                                        Operational patterns across deployed facilities.
+                                    </div>
+                                    <div style={{ marginBottom: 24, color: '#43474F', fontSize: 16, fontFamily: 'Inter', fontWeight: 400, lineHeight: '26px' }}>
+                                        Our network architecture allows us to observe non-obvious correlations between facility staffing ratios and patient outcome stability that singular entities overlook.
+                                    </div>
+                                </motion.div>
+
+                                {/* chip-stagger */}
+                                <div style={{ display: 'flex', gap: 8 }}>
+                                    {['Network Load', 'Efficiency Delta'].map((chip, i) => (
+                                        <motion.div
+                                            key={chip}
+                                            initial={{ opacity: 0, y: 6, scale: 0.88 }}
+                                            animate={metricCardInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+                                            transition={{ duration: 0.3, ease: sharp, delay: 0.78 + i * 0.1 }}
+                                            style={{ paddingLeft: 8, paddingRight: 8, paddingTop: 4, paddingBottom: 4, background: '#EDEEEF', borderRadius: 2 }}
+                                        >
+                                            <span style={{ color: '#191C1D', fontSize: 10, fontFamily: 'Inter', fontWeight: 700, textTransform: 'uppercase', lineHeight: '15px', letterSpacing: 1 }}>
+                                                {chip}
+                                            </span>
+                                        </motion.div>
+                                    ))}
                                 </div>
-                            </div>
-                            <div style={{ marginBottom: 12 }}>
-                                <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#001736', fontSize: 20, fontFamily: 'Manrope', fontWeight: '700', lineHeight: '28px', wordWrap: 'break-word' }}>Operational patterns across deployed<br />facilities.</div>
-                            </div>
-                            <div style={{ marginBottom: 24 }}>
-                                <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#43474F', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', lineHeight: '26px', wordWrap: 'break-word' }}>Our network architecture allows us to observe non-obvious correlations between facility staffing ratios and patient outcome stability that singular entities overlook.</div>
-                            </div>
-                            <div style={{ display: 'flex', gap: 8 }}>
-                                <div style={{ paddingLeft: 8, paddingRight: 8, paddingTop: 4, paddingBottom: 4, background: '#EDEEEF', borderRadius: 2 }}>
-                                    <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#191C1D', fontSize: 10, fontFamily: 'Inter', fontWeight: '700', textTransform: 'uppercase', lineHeight: '15px', letterSpacing: 1, wordWrap: 'break-word' }}>Network Load</div>
-                                </div>
-                                <div style={{ paddingLeft: 8, paddingRight: 8, paddingTop: 4, paddingBottom: 4, background: '#EDEEEF', borderRadius: 2 }}>
-                                    <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#191C1D', fontSize: 10, fontFamily: 'Inter', fontWeight: '700', textTransform: 'uppercase', lineHeight: '15px', letterSpacing: 1, wordWrap: 'break-word' }}>Efficiency Delta</div>
-                                </div>
-                            </div>
+                            </motion.div>
                         </div>
 
-                        {/* Two smaller cards */}
-                        <div style={{ alignSelf: 'stretch', display: 'flex', flexDirection: 'row', gap: 16 }}>
-                            {/* Dark card — 320+ Units */}
-                            <div style={{ flex: 1, padding: 24, position: 'relative', background: '#001736', overflow: 'hidden', borderRadius: 8, flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-start', display: 'flex', minHeight: 200 }}>
-                                <div style={{ position: 'absolute', top: 16, right: 24, opacity: 0.20 }}>
-                                    <svg width="55" height="43" viewBox="0 0 55 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        {/* ── grid-wave: lower two cards ── */}
+                        <div ref={lowerGridRef} style={{ display: 'flex', flexDirection: 'row', gap: 16 }}>
+
+                            {/* node-activate: dark 320+ card */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 24 }}
+                                animate={lowerGridInView ? { opacity: 1, y: 0 } : {}}
+                                transition={{ duration: 0.6, ease: ease, delay: 0 }}
+                                className="dark-intel-card"
+                                style={{ flex: 1, padding: 24, background: '#001736', borderRadius: 8, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', minHeight: 200, cursor: 'default' }}
+                            >
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.6 }}
+                                    animate={lowerGridInView ? { opacity: 0.20, scale: 1 } : {}}
+                                    transition={{ duration: 0.5, ease: ease, delay: 0.28 }}
+                                    className="node-pulse"
+                                    style={{ position: 'absolute', top: 16, right: 24 }}
+                                >
+                                    <svg width="55" height="43" viewBox="0 0 55 43" fill="none">
                                         <path d="M0 43L27.5 0L55 43H0Z" fill="white" />
                                     </svg>
+                                </motion.div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, position: 'relative', zIndex: 1 }}>
+                                    <div style={{ color: 'white', fontSize: 24, fontFamily: 'Inter', fontWeight: 600, lineHeight: '32px' }}>320+ Units</div>
+                                    <div style={{ color: '#7594CA', fontSize: 12, fontFamily: 'Inter', fontWeight: 400, lineHeight: '15px' }}>
+                                        Coordinated facility nodes<br />providing continuous feedback<br />loops.
+                                    </div>
                                 </div>
-                                <div style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 8, display: 'flex' }}>
-                                    <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'white', fontSize: 24, fontFamily: 'Inter', fontWeight: '600', lineHeight: '32px', wordWrap: 'break-word' }}>320+ Units</div>
-                                    <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#7594CA', fontSize: 12, fontFamily: 'Inter', fontWeight: '400', lineHeight: '15px', wordWrap: 'break-word' }}>Coordinated facility nodes<br />providing continuous feedback<br />loops.</div>
+                            </motion.div>
+
+                            {/* chart-rise: Predictive Staffing */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 24 }}
+                                animate={lowerGridInView ? { opacity: 1, y: 0 } : {}}
+                                transition={{ duration: 0.6, ease: ease, delay: 0.08 }}
+                                className="hover-raise"
+                                style={{ flex: 1, padding: 24, background: '#F3F4F5', borderRadius: 8, outline: '1px rgba(196,198,208,0.10) solid', outlineOffset: '-1px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minHeight: 200, overflow: 'hidden' }}
+                            >
+                                {/* chart bar grows upward from bottom */}
+                                <motion.div
+                                    initial={{ scaleY: 0 }}
+                                    animate={lowerGridInView ? { scaleY: 1 } : {}}
+                                    transition={{ duration: 0.6, ease: ease, delay: 0.22 }}
+                                    style={{ alignSelf: 'stretch', height: 27, background: '#006970', transformOrigin: 'bottom' }}
+                                />
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 'auto', paddingTop: 24 }}>
+                                    <div style={{ color: '#001736', fontSize: 16, fontFamily: 'Inter', fontWeight: 600, lineHeight: '24px' }}>Predictive Staffing</div>
+                                    <div style={{ color: '#43474F', fontSize: 12, fontFamily: 'Inter', fontWeight: 400, lineHeight: '16px' }}>
+                                        Advanced algorithms predicting surge requirements 72 hours in advance based on system-wide trends.
+                                    </div>
                                 </div>
-                            </div>
-                            {/* Light card — Predictive Staffing */}
-                            <div style={{ flex: 1, padding: 24, background: '#F3F4F5', borderRadius: 8, outline: '1px rgba(196, 198, 208, 0.10) solid', outlineOffset: '-1px', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-start', display: 'flex', minHeight: 200 }}>
-                                <div style={{ alignSelf: 'stretch', height: 27, background: '#006970', marginBottom: 'auto' }} />
-                                <div style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 8, display: 'flex', marginTop: 48 }}>
-                                    <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#001736', fontSize: 16, fontFamily: 'Inter', fontWeight: '600', lineHeight: '24px', wordWrap: 'break-word' }}>Predictive Staffing</div>
-                                    <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#43474F', fontSize: 12, fontFamily: 'Inter', fontWeight: '400', lineHeight: '16px', wordWrap: 'break-word' }}>Advanced algorithms predicting<br />surge requirements 72 hours in<br />advance based on system-wide<br />trends.</div>
-                                </div>
-                            </div>
+                            </motion.div>
                         </div>
                     </div>
 
-                    {/* Right column — Clinical Perspectives */}
-                    <div style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 32, display: 'flex' }}>
-                        <div style={{ alignSelf: 'stretch', justifyContent: 'flex-start', alignItems: 'baseline', display: 'flex' }}>
-                            <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#001736', fontSize: 24, fontFamily: 'Manrope', fontWeight: '700', lineHeight: '32px', wordWrap: 'break-word' }}>Clinical Perspectives</div>
-                        </div>
+                    {/* ── Right column ─────────────────────────────────── */}
+                    <div ref={rightCardsRef} style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 32 }}>
 
-                        {/* Testimonial 1 — Dr. Elias Thorne */}
-                        <div style={{ alignSelf: 'stretch', background: 'white', boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)', borderRadius: 8, outline: '1px rgba(196, 198, 208, 0.05) solid', outlineOffset: '-1px', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex', overflow: 'hidden' }}>
-                            <div style={{ alignSelf: 'stretch', padding: 24, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 15, display: 'flex' }}>
-                                <div style={{ alignSelf: 'stretch', justifyContent: 'flex-start', alignItems: 'center', gap: 16, display: 'flex' }}>
-                                    <div style={{ width: 48, height: 48, background: '#E7E8E9', overflow: 'hidden', borderRadius: 12, flexShrink: 0 }}>
+                        {/* tab-fade: header */}
+                        <motion.span
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={sectionHeaderInView ? { opacity: 1, y: 0 } : {}}
+                            transition={{ duration: 0.4, ease: sharp, delay: 0.15 }}
+                            style={{ color: '#001736', fontSize: 24, fontFamily: 'Manrope', fontWeight: 700, lineHeight: '32px', display: 'block' }}
+                        >
+                            Clinical Perspectives
+                        </motion.span>
+
+                        {/* feed-slide: testimonial card 1 */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 24 }}
+                            animate={rightCardsInView ? { opacity: 1, x: 0 } : {}}
+                            transition={{ duration: 0.6, ease: ease, delay: 0 }}
+                            className="hover-raise"
+                            style={{ background: 'white', boxShadow: '0px 1px 2px rgba(0,0,0,0.05)', borderRadius: 8, outline: '1px rgba(196,198,208,0.05) solid', outlineOffset: '-1px', overflow: 'hidden' }}
+                        >
+                            <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 15 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                                    {/* avatar scale 0.9 → 1 */}
+                                    <motion.div
+                                        initial={{ scale: 0.9 }}
+                                        animate={rightCardsInView ? { scale: 1 } : {}}
+                                        transition={{ duration: 0.4, ease: ease, delay: 0.18 }}
+                                        style={{ width: 48, height: 48, background: '#E7E8E9', overflow: 'hidden', borderRadius: 12, flexShrink: 0 }}
+                                    >
                                         <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src="https://placehold.co/48x48" alt="Dr. Elias Thorne" />
-                                    </div>
-                                    <div style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex' }}>
-                                        <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#001736', fontSize: 14, fontFamily: 'Inter', fontWeight: '700', lineHeight: '20px', wordWrap: 'break-word' }}>Dr. Elias Thorne</div>
-                                        <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#006970', fontSize: 10, fontFamily: 'Inter', fontWeight: '600', textTransform: 'uppercase', lineHeight: '15px', letterSpacing: 1, wordWrap: 'break-word' }}>Chief Clinical Officer</div>
+                                    </motion.div>
+                                    <div>
+                                        <div style={{ color: '#001736', fontSize: 14, fontFamily: 'Inter', fontWeight: 700, lineHeight: '20px' }}>Dr. Elias Thorne</div>
+                                        <div style={{ color: '#006970', fontSize: 10, fontFamily: 'Inter', fontWeight: 600, textTransform: 'uppercase', lineHeight: '15px', letterSpacing: 1 }}>Chief Clinical Officer</div>
                                     </div>
                                 </div>
-                                <div style={{ alignSelf: 'stretch', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#43474F', fontSize: 14, fontFamily: 'Inter', fontWeight: '400', lineHeight: '22.75px', wordWrap: 'break-word' }}>&quot;Where clinical advisors and facility leadership have a view, we see the transition from raw data into actionable wisdom. We aren&apos;t just observing; we are sculpting the future of care.&quot;</div>
+                                <div style={{ color: '#43474F', fontSize: 14, fontFamily: 'Inter', fontWeight: 400, lineHeight: '22.75px' }}>
+                                    &quot;Where clinical advisors and facility leadership have a view, we see the transition from raw data into actionable wisdom. We aren&apos;t just observing; we are sculpting the future of care.&quot;
+                                </div>
                             </div>
-                            <div style={{ alignSelf: 'stretch', paddingLeft: 24, paddingRight: 24, paddingTop: 12, paddingBottom: 12, background: '#F3F4F5', justifyContent: 'space-between', alignItems: 'center', display: 'flex' }}>
-                                <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#43474F', fontSize: 10, fontFamily: 'Inter', fontWeight: '700', textTransform: 'uppercase', lineHeight: '15px', letterSpacing: 1, wordWrap: 'break-word' }}>Q3 Protocol Review</div>
-                                <div style={{ width: 9.33, height: 9.33, background: '#006970' }} />
+                            {/* arrow-shift footer — proper arrow SVG */}
+                            <div
+                                className="arrow-shift"
+                                style={{ paddingLeft: 24, paddingRight: 24, paddingTop: 12, paddingBottom: 12, background: '#F3F4F5', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+                            >
+                                <span style={{ color: '#43474F', fontSize: 10, fontFamily: 'Inter', fontWeight: 700, textTransform: 'uppercase', lineHeight: '15px', letterSpacing: 1 }}>
+                                    Q3 Protocol Review
+                                </span>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="#006970" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
                             </div>
-                        </div>
+                        </motion.div>
 
-                        {/* Testimonial 2 — Sarah Jenkins */}
-                        <div style={{ alignSelf: 'stretch', padding: 24, background: 'white', boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.05)', borderRadius: 8, outline: '1px rgba(196, 198, 208, 0.05) solid', outlineOffset: '-1px', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 14, display: 'flex' }}>
-                            <div style={{ alignSelf: 'stretch', justifyContent: 'flex-start', alignItems: 'center', gap: 16, display: 'flex' }}>
-                                <div style={{ width: 48, height: 48, background: '#E7E8E9', overflow: 'hidden', borderRadius: 12, flexShrink: 0 }}>
+                        {/* feed-slide: testimonial card 2 — 150ms later */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 24 }}
+                            animate={rightCardsInView ? { opacity: 1, x: 0 } : {}}
+                            transition={{ duration: 0.6, ease: ease, delay: 0.15 }}
+                            className="hover-raise"
+                            style={{ padding: 24, background: 'white', boxShadow: '0px 1px 2px rgba(0,0,0,0.05)', borderRadius: 8, outline: '1px rgba(196,198,208,0.05) solid', outlineOffset: '-1px', display: 'flex', flexDirection: 'column', gap: 14 }}
+                        >
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                                <motion.div
+                                    initial={{ scale: 0.9 }}
+                                    animate={rightCardsInView ? { scale: 1 } : {}}
+                                    transition={{ duration: 0.4, ease: ease, delay: 0.32 }}
+                                    style={{ width: 48, height: 48, background: '#E7E8E9', overflow: 'hidden', borderRadius: 12, flexShrink: 0 }}
+                                >
                                     <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src="https://placehold.co/48x48" alt="Sarah Jenkins" />
-                                </div>
-                                <div style={{ flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex' }}>
-                                    <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#001736', fontSize: 14, fontFamily: 'Inter', fontWeight: '700', lineHeight: '20px', wordWrap: 'break-word' }}>Sarah Jenkins</div>
-                                    <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#006970', fontSize: 10, fontFamily: 'Inter', fontWeight: '600', textTransform: 'uppercase', lineHeight: '15px', letterSpacing: 1, wordWrap: 'break-word' }}>Head of Operational Excellence</div>
+                                </motion.div>
+                                <div>
+                                    <div style={{ color: '#001736', fontSize: 14, fontFamily: 'Inter', fontWeight: 700, lineHeight: '20px' }}>Sarah Jenkins</div>
+                                    <div style={{ color: '#006970', fontSize: 10, fontFamily: 'Inter', fontWeight: 600, textTransform: 'uppercase', lineHeight: '15px', letterSpacing: 1 }}>Head of Operational Excellence</div>
                                 </div>
                             </div>
-                            <div style={{ alignSelf: 'stretch', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#43474F', fontSize: 14, fontFamily: 'Inter', fontWeight: '400', lineHeight: '22.75px', wordWrap: 'break-word' }}>&quot;The scalability of our insights is what separates us from consultants. We live the operational reality every hour.&quot;</div>
-                        </div>
+                            <div style={{ color: '#43474F', fontSize: 14, fontFamily: 'Inter', fontWeight: 400, lineHeight: '22.75px' }}>
+                                &quot;The scalability of our insights is what separates us from consultants. We live the operational reality every hour.&quot;
+                            </div>
+                        </motion.div>
 
-                        {/* Global Operations Hub image card */}
-                        <div style={{ alignSelf: 'stretch', position: 'relative', overflow: 'hidden', borderRadius: 16, display: 'flex' }}>
-                            <img style={{ alignSelf: 'stretch', width: '100%', height: 259, objectFit: 'cover' }} src="https://placehold.co/600x259/001736/001736" alt="Global Operations Hub" />
-                            <div style={{ position: 'absolute', inset: 0, padding: 32, background: 'linear-gradient(0deg, rgba(0, 23, 54, 0.80) 0%, rgba(0, 23, 54, 0) 100%)', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-start', display: 'flex' }}>
-                                <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'white', fontSize: 18, fontFamily: 'Inter', fontWeight: '600', lineHeight: '22.50px', wordWrap: 'break-word' }}>Global Operations Hub</div>
-                                <div style={{ paddingTop: 4, justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#96F1FA', fontSize: 12, fontFamily: 'Inter', fontWeight: '400', lineHeight: '16px', wordWrap: 'break-word' }}>Direct telemetric feed from 42 states</div>
+                        {/* hub-reveal: Global Operations Hub — scale + parallax */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={rightCardsInView ? { opacity: 1 } : {}}
+                            transition={{ duration: 0.55, ease: ease, delay: 0.25 }}
+                            style={{ position: 'relative', overflow: 'hidden', borderRadius: 16 }}
+                        >
+                            {/* scale-down reveal wrapper */}
+                            <motion.div
+                                initial={{ scale: 1.06 }}
+                                animate={rightCardsInView ? { scale: 1 } : {}}
+                                transition={{ duration: 0.9, ease: ease }}
+                            >
+                                {/* parallax layer */}
+                                <div
+                                    ref={hubRef}
+                                    onMouseMove={handleHubMove}
+                                    onMouseLeave={handleHubLeave}
+                                    style={{
+                                        transform: `translate(${hubXY.x}px, ${hubXY.y}px) scale(1.04)`,
+                                        transition: 'transform 0.28s ease',
+                                    }}
+                                >
+                                    <img
+                                        style={{ width: '100%', height: 259, objectFit: 'cover', display: 'block' }}
+                                        src="https://placehold.co/600x259/001736/001736"
+                                        alt="Global Operations Hub"
+                                    />
+                                </div>
+                            </motion.div>
+                            <div style={{ position: 'absolute', inset: 0, padding: 32, background: 'linear-gradient(0deg, rgba(0,23,54,0.80) 0%, rgba(0,23,54,0) 100%)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', pointerEvents: 'none' }}>
+                                <div style={{ color: 'white', fontSize: 18, fontFamily: 'Inter', fontWeight: 600, lineHeight: '22.5px' }}>Global Operations Hub</div>
+                                <div style={{ paddingTop: 4, color: '#96F1FA', fontSize: 12, fontFamily: 'Inter', fontWeight: 400, lineHeight: '16px' }}>Direct telemetric feed from 42 states</div>
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
 
-                {/* Section 3 — Access the Full Architecture */}
-                <div style={{ alignSelf: 'stretch', paddingTop: 80, paddingBottom: 48, paddingLeft: 48, paddingRight: 48, position: 'relative', background: 'white', overflow: 'hidden', borderRadius: 24, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: 48, marginBottom: 48 }}>
-                    {/* Gradient overlay */}
-                    <div style={{ position: 'absolute', right: 0, top: 32, bottom: 0, width: '50%', background: 'linear-gradient(270deg, rgba(0, 105, 112, 0.05) 0%, rgba(0, 105, 112, 0) 100%)', pointerEvents: 'none' }} />
+                {/* ══ SECTION 3 — Access the Full Architecture ══════════════════ */}
+                <div
+                    ref={accessRef}
+                    style={{ paddingTop: 80, paddingBottom: 48, paddingLeft: 48, paddingRight: 48, position: 'relative', background: 'white', overflow: 'hidden', borderRadius: 24, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: 48, marginBottom: 48 }}
+                >
+                    <div style={{ position: 'absolute', right: 0, top: 32, bottom: 0, width: '50%', background: 'linear-gradient(270deg, rgba(0,105,112,0.05) 0%, rgba(0,105,112,0) 100%)', pointerEvents: 'none' }} />
 
-                    {/* Left — Text + buttons */}
-                    <div style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', gap: 24, display: 'flex', position: 'relative', zIndex: 1 }}>
-                        <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#001736', fontSize: 30, fontFamily: 'Manrope', fontWeight: '700', lineHeight: '36px', wordWrap: 'break-word' }}>Access the Full<br />Architecture</div>
-                        <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#43474F', fontSize: 18, fontFamily: 'Inter', fontWeight: '400', lineHeight: '29.25px', wordWrap: 'break-word' }}>Our proprietary Insights portal is restricted to authorized facility leadership and strategic partners. Get full access to live operational deltas and clinical benchmarks.</div>
-                        <div style={{ paddingTop: 8, justifyContent: 'flex-start', alignItems: 'flex-start', gap: 16, display: 'flex' }}>
-                            <div style={{ paddingTop: 12, paddingBottom: 13, paddingLeft: 32, paddingRight: 32, background: '#001736', borderRadius: 6, display: 'flex', cursor: 'pointer' }}>
-                                <div style={{ textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'white', fontSize: 14, fontFamily: 'Inter', fontWeight: '700', lineHeight: '20px', wordWrap: 'break-word' }}>Request Access</div>
+                    {/* portal-rise: left block */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 22 }}
+                        animate={accessInView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 0.65, ease: ease }}
+                        style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 24, position: 'relative', zIndex: 1 }}
+                    >
+                        <div style={{ color: '#001736', fontSize: 30, fontFamily: 'Manrope', fontWeight: 700, lineHeight: '36px' }}>
+                            Access the Full<br />Architecture
+                        </div>
+                        <div style={{ color: '#43474F', fontSize: 18, fontFamily: 'Inter', fontWeight: 400, lineHeight: '29.25px' }}>
+                            Our proprietary Insights portal is restricted to authorized facility leadership and strategic partners. Get full access to live operational deltas and clinical benchmarks.
+                        </div>
+                        <div style={{ paddingTop: 8, display: 'flex', gap: 16 }}>
+                            <div className="btn-dark" style={{ paddingTop: 12, paddingBottom: 13, paddingLeft: 32, paddingRight: 32, background: '#001736', borderRadius: 6, display: 'flex', cursor: 'pointer' }}>
+                                <span style={{ color: 'white', fontSize: 14, fontFamily: 'Inter', fontWeight: 700, lineHeight: '20px' }}>Request Access</span>
                             </div>
-                            <div style={{ paddingLeft: 32, paddingRight: 32, paddingTop: 12, paddingBottom: 12, borderRadius: 6, outline: '1px #C4C6D0 solid', outlineOffset: '-1px', display: 'flex', cursor: 'pointer' }}>
-                                <div style={{ textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#001736', fontSize: 14, fontFamily: 'Inter', fontWeight: '700', lineHeight: '20px', wordWrap: 'break-word' }}>Documentation</div>
+                            <div className="btn-ghost" style={{ paddingLeft: 32, paddingRight: 32, paddingTop: 12, paddingBottom: 12, borderRadius: 6, outline: '1px #C4C6D0 solid', outlineOffset: '-1px', display: 'flex', cursor: 'pointer' }}>
+                                <span style={{ color: '#001736', fontSize: 14, fontFamily: 'Inter', fontWeight: 700, lineHeight: '20px' }}>Documentation</span>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
 
-                    {/* Right — Stats grid */}
+                    {/* stat-reveal: stats grid with count-up */}
                     <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, position: 'relative', zIndex: 1 }}>
                         {[
-                            { value: '1.2M+', label: 'Daily Data Points' },
-                            { value: '15ms', label: 'Processing\nLatency' },
-                            { value: '24/7', label: 'Active Monitoring' },
-                            { value: 'Zero', label: 'External Reliance' },
-                        ].map(({ value, label }) => (
-                            <div key={value} style={{ padding: 24, background: '#F3F4F5', borderRadius: 8, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'flex' }}>
-                                <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#006970', fontSize: 24, fontFamily: 'Inter', fontWeight: '600', lineHeight: '32px', wordWrap: 'break-word' }}>{value}</div>
-                                <div style={{ justifyContent: 'center', display: 'flex', flexDirection: 'column', color: '#43474F', fontSize: 10, fontFamily: 'Inter', fontWeight: '600', textTransform: 'uppercase', lineHeight: '15px', letterSpacing: 1, wordWrap: 'break-word', whiteSpace: 'pre-line' }}>{label}</div>
-                            </div>
+                            { raw: 1.2,  suffix: 'M+', label: 'Daily Data Points',   countable: true,  decimals: 1, delay: 0.12 },
+                            { raw: 15,   suffix: 'ms', label: 'Processing\nLatency', countable: true,  decimals: 0, delay: 0.22 },
+                            { raw: null, suffix: '',   label: 'Active Monitoring',   countable: false, text: '24/7', delay: 0.32 },
+                            { raw: null, suffix: '',   label: 'External Reliance',   countable: false, text: 'Zero', delay: 0.42 },
+                        ].map((stat) => (
+                            <motion.div
+                                key={stat.label}
+                                initial={{ opacity: 0, y: 16 }}
+                                animate={accessInView ? { opacity: 1, y: 0 } : {}}
+                                transition={{ duration: 0.5, ease: sharp, delay: stat.delay }}
+                                style={{ padding: 24, background: '#F3F4F5', borderRadius: 8, display: 'flex', flexDirection: 'column' }}
+                            >
+                                <div style={{ color: '#006970', fontSize: 24, fontFamily: 'Inter', fontWeight: 600, lineHeight: '32px' }}>
+                                    {stat.countable
+                                        ? <CountUp end={stat.raw} duration={1.2} active={accessInView} decimals={stat.decimals} suffix={stat.suffix} />
+                                        : stat.text}
+                                </div>
+                                <div style={{ color: '#43474F', fontSize: 10, fontFamily: 'Inter', fontWeight: 600, textTransform: 'uppercase', lineHeight: '15px', letterSpacing: 1, whiteSpace: 'pre-line' }}>
+                                    {stat.label}
+                                </div>
+                            </motion.div>
                         ))}
                     </div>
                 </div>
