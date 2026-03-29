@@ -22,7 +22,7 @@ export default function NewsPage() {
     const inNewsInView = useInView(inNewsRef, { once: true, amount: 0.15 })
 
     return (
-        <PageLayout fullWidth title="">
+        <PageLayout fullWidth title="" lightHero>
             <div style={{ fontFamily: "'Inter', sans-serif" }}>
 
                 {/* ── Hero: Row 1 — Badge + Heading (left) | Body text (right) ── */}

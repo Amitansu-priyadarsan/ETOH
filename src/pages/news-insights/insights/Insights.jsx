@@ -1,6 +1,9 @@
 import { useRef, useState, useEffect, useCallback } from 'react'
 import { motion, useInView } from 'framer-motion'
 import PageLayout from '../../../components/PageLayout'
+import { useResponsive } from '../../../hooks/useResponsive'
+import doctor1 from '../../the-system/for-patients/pre-admission/assets/doctor1.png'
+import doctor2 from '../../the-system/for-patients/pre-admission/assets/doctor2.png'
 
 const ease = [0.22, 1, 0.36, 1]
 const sharp = [0.25, 0.46, 0.45, 0.94]
@@ -96,6 +99,7 @@ function CountUp({ end, duration = 1.2, active, decimals = 0, suffix = '' }) {
 
 // ────────────────────────────────────────────────────────────────────────────
 export default function InsightsPage() {
+    const { isMobile } = useResponsive()
     const sectionHeaderRef = useRef(null)
     const metricCardRef    = useRef(null)
     const lowerGridRef     = useRef(null)
@@ -201,17 +205,17 @@ export default function InsightsPage() {
                 .btn-ghost:hover { transform: translateY(-2px); outline-color: rgba(0,105,112,0.45) !important; }
             `}</style>
 
-            <div style={{ paddingLeft: 24, paddingRight: 24 }}>
+            <div style={{ paddingLeft: isMobile ? 16 : 24, paddingRight: isMobile ? 16 : 24, width: '100%', boxSizing: 'border-box' }}>
 
                 {/* ══ SECTION 1 — Hero ══════════════════════════════════════════ */}
-                <div style={{ paddingTop: 80, paddingBottom: 96, display: 'flex', flexDirection: 'column', gap: 24 }}>
+                <div style={{ paddingTop: isMobile ? 48 : 80, paddingBottom: isMobile ? 48 : 96, display: 'flex', flexDirection: 'column', gap: 24 }}>
 
                     {/* Badge */}
                     <motion.div
                         initial={{ opacity: 0, y: 8, filter: 'blur(4px)' }}
                         animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                         transition={{ duration: 0.45, ease: sharp }}
-                        style={{ paddingLeft: 12, paddingRight: 12, paddingTop: 4, paddingBottom: 4, background: '#96F1FA', borderRadius: 12, display: 'inline-flex' }}
+                        style={{ paddingLeft: 12, paddingRight: 12, paddingTop: 4, paddingBottom: 4, background: '#96F1FA', borderRadius: 12, display: 'inline-flex', alignSelf: 'flex-start' }}
                     >
                         <span style={{ color: '#006F77', fontSize: 10, fontFamily: 'Inter', fontWeight: 700, textTransform: 'uppercase', lineHeight: '15px', letterSpacing: 2 }}>
                             Proprietary Vantage
@@ -220,7 +224,7 @@ export default function InsightsPage() {
 
                     {/* typing headline */}
                     <div style={{ paddingBottom: 8 }}>
-                        <h1 style={{ margin: 0, color: '#001736', fontSize: 72, fontFamily: 'Manrope', fontWeight: 800, lineHeight: '72px', minHeight: '360px' }}>
+                        <h1 style={{ margin: 0, color: '#001736', fontSize: isMobile ? 22 : 72, fontFamily: 'Manrope', fontWeight: 800, lineHeight: isMobile ? '30px' : '72px', minHeight: isMobile ? 'auto' : '360px', wordBreak: 'break-word', overflowWrap: 'break-word', maxWidth: '100%' }}>
                             <TypewriterHeadline />
                         </h1>
                     </div>
@@ -235,13 +239,13 @@ export default function InsightsPage() {
                 </div>
 
                 {/* ══ SECTION 2 — Two columns ═══════════════════════════════════ */}
-                <div style={{ display: 'flex', flexDirection: 'row', gap: 32, paddingBottom: 96 }}>
+                <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 40 : 32, paddingBottom: isMobile ? 48 : 96 }}>
 
                     {/* ── Left column ─────────────────────────────────── */}
                     <div ref={sectionHeaderRef} style={{ flex: 1.4, display: 'flex', flexDirection: 'column', gap: 32 }}>
 
                         {/* tab-fade: section headers */}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                        <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'baseline', gap: isMobile ? 4 : 0 }}>
                             <motion.span
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={sectionHeaderInView ? { opacity: 1, y: 0 } : {}}
@@ -268,7 +272,7 @@ export default function InsightsPage() {
                                 animate={metricCardInView ? { opacity: 1, y: 0 } : {}}
                                 transition={{ duration: 0.6, ease: ease }}
                                 className="hover-raise hover-raise-border"
-                                style={{ position: 'relative', background: 'white', boxShadow: '0px 1px 2px rgba(0,0,0,0.05)', overflow: 'hidden', borderRadius: 8, padding: 34, borderLeft: '2px transparent solid' }}
+                                style={{ position: 'relative', background: 'white', boxShadow: '0px 1px 2px rgba(0,0,0,0.05)', overflow: 'hidden', borderRadius: 8, padding: isMobile ? 20 : 34, borderLeft: '2px transparent solid' }}
                             >
                                 {/* border-grow: left teal bar scaleY 0 → 1 */}
                                 <motion.div
@@ -278,7 +282,7 @@ export default function InsightsPage() {
                                     style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 2, background: '#006970', transformOrigin: 'top', borderRadius: '2px 0 0 2px' }}
                                 />
 
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 64 }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: isMobile ? 32 : 64 }}>
                                     {/* icon appears */}
                                     <motion.div
                                         initial={{ opacity: 0, scale: 0.75 }}
@@ -300,7 +304,7 @@ export default function InsightsPage() {
                                         transition={{ duration: 0.3, delay: 0.42 }}
                                         style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}
                                     >
-                                        <span style={{ textAlign: 'right', color: '#001736', fontSize: 36, fontFamily: 'Manrope', fontWeight: 900, lineHeight: '40px' }}>
+                                        <span style={{ textAlign: 'right', color: '#001736', fontSize: isMobile ? 26 : 36, fontFamily: 'Manrope', fontWeight: 900, lineHeight: isMobile ? '32px' : '40px' }}>
                                             <CountUp end={94.2} duration={1.2} active={metricCardInView} decimals={1} suffix="%" />
                                         </span>
                                         <span style={{ textAlign: 'right', color: '#43474F', fontSize: 10, fontFamily: 'Inter', fontWeight: 700, textTransform: 'uppercase', lineHeight: '15px' }}>
@@ -343,7 +347,7 @@ export default function InsightsPage() {
                         </div>
 
                         {/* ── grid-wave: lower two cards ── */}
-                        <div ref={lowerGridRef} style={{ display: 'flex', flexDirection: 'row', gap: 16 }}>
+                        <div ref={lowerGridRef} style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 16 }}>
 
                             {/* node-activate: dark 320+ card */}
                             <motion.div
@@ -427,7 +431,7 @@ export default function InsightsPage() {
                                         transition={{ duration: 0.4, ease: ease, delay: 0.18 }}
                                         style={{ width: 48, height: 48, background: '#E7E8E9', overflow: 'hidden', borderRadius: 12, flexShrink: 0 }}
                                     >
-                                        <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src="https://placehold.co/48x48" alt="Dr. Elias Thorne" />
+                                        <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src={doctor1} alt="Dr. Elias Thorne" />
                                     </motion.div>
                                     <div>
                                         <div style={{ color: '#001736', fontSize: 14, fontFamily: 'Inter', fontWeight: 700, lineHeight: '20px' }}>Dr. Elias Thorne</div>
@@ -467,7 +471,7 @@ export default function InsightsPage() {
                                     transition={{ duration: 0.4, ease: ease, delay: 0.32 }}
                                     style={{ width: 48, height: 48, background: '#E7E8E9', overflow: 'hidden', borderRadius: 12, flexShrink: 0 }}
                                 >
-                                    <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src="https://placehold.co/48x48" alt="Sarah Jenkins" />
+                                    <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src={doctor2} alt="Sarah Jenkins" />
                                 </motion.div>
                                 <div>
                                     <div style={{ color: '#001736', fontSize: 14, fontFamily: 'Inter', fontWeight: 700, lineHeight: '20px' }}>Sarah Jenkins</div>
@@ -520,7 +524,7 @@ export default function InsightsPage() {
                 {/* ══ SECTION 3 — Access the Full Architecture ══════════════════ */}
                 <div
                     ref={accessRef}
-                    style={{ paddingTop: 80, paddingBottom: 48, paddingLeft: 48, paddingRight: 48, position: 'relative', background: 'white', overflow: 'hidden', borderRadius: 24, display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: 48, marginBottom: 48 }}
+                    style={{ paddingTop: isMobile ? 40 : 80, paddingBottom: isMobile ? 40 : 48, paddingLeft: isMobile ? 24 : 48, paddingRight: isMobile ? 24 : 48, position: 'relative', background: 'white', overflow: 'hidden', borderRadius: 24, display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: isMobile ? 32 : 48, marginBottom: 48 }}
                 >
                     <div style={{ position: 'absolute', right: 0, top: 32, bottom: 0, width: '50%', background: 'linear-gradient(270deg, rgba(0,105,112,0.05) 0%, rgba(0,105,112,0) 100%)', pointerEvents: 'none' }} />
 
@@ -531,13 +535,13 @@ export default function InsightsPage() {
                         transition={{ duration: 0.65, ease: ease }}
                         style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 24, position: 'relative', zIndex: 1 }}
                     >
-                        <div style={{ color: '#001736', fontSize: 30, fontFamily: 'Manrope', fontWeight: 700, lineHeight: '36px' }}>
+                        <div style={{ color: '#001736', fontSize: isMobile ? 24 : 30, fontFamily: 'Manrope', fontWeight: 700, lineHeight: isMobile ? '30px' : '36px' }}>
                             Access the Full<br />Architecture
                         </div>
-                        <div style={{ color: '#43474F', fontSize: 18, fontFamily: 'Inter', fontWeight: 400, lineHeight: '29.25px' }}>
+                        <div style={{ color: '#43474F', fontSize: isMobile ? 15 : 18, fontFamily: 'Inter', fontWeight: 400, lineHeight: isMobile ? '24px' : '29.25px' }}>
                             Our proprietary Insights portal is restricted to authorized facility leadership and strategic partners. Get full access to live operational deltas and clinical benchmarks.
                         </div>
-                        <div style={{ paddingTop: 8, display: 'flex', gap: 16 }}>
+                        <div style={{ paddingTop: 8, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                             <div className="btn-dark" style={{ paddingTop: 12, paddingBottom: 13, paddingLeft: 32, paddingRight: 32, background: '#001736', borderRadius: 6, display: 'flex', cursor: 'pointer' }}>
                                 <span style={{ color: 'white', fontSize: 14, fontFamily: 'Inter', fontWeight: 700, lineHeight: '20px' }}>Request Access</span>
                             </div>
@@ -548,7 +552,7 @@ export default function InsightsPage() {
                     </motion.div>
 
                     {/* stat-reveal: stats grid with count-up */}
-                    <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, position: 'relative', zIndex: 1 }}>
+                    <div style={{ flex: 1, width: isMobile ? '100%' : undefined, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, position: 'relative', zIndex: 1 }}>
                         {[
                             { raw: 1.2,  suffix: 'M+', label: 'Daily Data Points',   countable: true,  decimals: 1, delay: 0.12 },
                             { raw: 15,   suffix: 'ms', label: 'Processing\nLatency', countable: true,  decimals: 0, delay: 0.22 },

@@ -27,7 +27,7 @@ export default function PageLayout({ title, children, fullWidth = false, lightHe
     }, [])
 
     return (
-        <div className="relative min-h-screen bg-[#f5f2ed]">
+        <div className="relative min-h-screen bg-[#f5f2ed]" style={{ overflowX: 'hidden' }}>
             {/* Top bar */}
             <header
                 className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between transition-transform duration-300 ease-in-out"

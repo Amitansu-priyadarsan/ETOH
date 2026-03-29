@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion, useInView } from 'framer-motion'
 import PageLayout from '../../../components/PageLayout'
+import { useResponsive } from '../../../hooks/useResponsive'
 import heroImg from './hero1.png'
 import IconSvg from './iconsvg'
 
@@ -24,7 +25,7 @@ const complianceTags = ['ISO 27001', 'HIPAA Compliant', 'SOC2 Type II']
 
 const QUOTE_TEXT = '"Transparency about methodology is not a weakness in a clinical technology platform. It is the minimum standard of intellectual honesty."'
 
-function TypewriterQuote({ active }) {
+function TypewriterQuote({ active, isMobile }) {
     const [count, setCount] = useState(0)
     const [showCursor, setShowCursor] = useState(false)
     const [cursorFading, setCursorFading] = useState(false)
@@ -90,7 +91,7 @@ function TypewriterQuote({ active }) {
     })
 
     return (
-        <p style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 500, fontSize: 30, lineHeight: '36px', margin: 0 }}>
+        <p style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 500, fontSize: isMobile ? 20 : 30, lineHeight: isMobile ? '30px' : '36px', margin: 0 }}>
             {chars}
             {showCursor && (
                 <span style={{
@@ -120,6 +121,7 @@ function ResourceIcon({ type }) {
 }
 
 export default function TechnologyPage() {
+    const { isMobile } = useResponsive()
     const quoteRef = useRef(null)
     const backboneRef = useRef(null)
     const validationRef = useRef(null)
@@ -208,10 +210,10 @@ export default function TechnologyPage() {
             <div style={{ fontFamily: "'Inter', sans-serif" }}>
 
                 {/* ── Section 1: Hero ── */}
-                <div style={{ background: '#F8F9FA', padding: '128px 24px', overflow: 'hidden' }}>
-                    <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', alignItems: 'flex-start', gap: 64 }}>
+                <div style={{ background: '#F8F9FA', padding: isMobile ? '64px 20px' : '128px 24px', overflow: 'hidden' }}>
+                    <div style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: 'flex-start', gap: isMobile ? 32 : 64 }}>
                         {/* Left copy */}
-                        <div style={{ maxWidth: 620, display: 'flex', flexDirection: 'column', gap: 24, flexShrink: 0 }}>
+                        <div style={{ maxWidth: isMobile ? '100%' : 620, display: 'flex', flexDirection: 'column', gap: 24, flexShrink: 0 }}>
                             <motion.div
                                 initial={{ opacity: 0, y: 8, filter: 'blur(4px)' }}
                                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
@@ -227,7 +229,7 @@ export default function TechnologyPage() {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.7, ease: ease, delay: 0.1 }}
-                                style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 800, fontSize: 72, lineHeight: '72px', margin: 0 }}
+                                style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 800, fontSize: isMobile ? 36 : 72, lineHeight: isMobile ? '42px' : '72px', margin: 0 }}
                             >
                                 <span style={{ color: '#001736' }}>The architecture behind the system.</span>
                                 <br />
@@ -238,7 +240,7 @@ export default function TechnologyPage() {
                                 initial={{ opacity: 0, y: 12 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.6, ease: ease, delay: 0.25 }}
-                                style={{ fontFamily: "'Inter', sans-serif", fontWeight: 400, fontSize: 20, lineHeight: '28px', color: '#43474F', maxWidth: 576, margin: 0, paddingTop: 8 }}
+                                style={{ fontFamily: "'Inter', sans-serif", fontWeight: 400, fontSize: isMobile ? 16 : 20, lineHeight: isMobile ? '26px' : '28px', color: '#43474F', maxWidth: 576, margin: 0, paddingTop: 8 }}
                             >
                                 ETOH publishes technical documentation for clinical AI researchers, health informaticists, and hospital technology leadership who want to understand not just what the platform does, but how it works.
                             </motion.p>
@@ -249,7 +251,7 @@ export default function TechnologyPage() {
                             initial={{ opacity: 0, x: 30, scale: 0.97 }}
                             animate={{ opacity: 1, x: 0, scale: 1 }}
                             transition={{ duration: 0.8, ease: ease, delay: 0.2 }}
-                            style={{ flex: 1, position: 'relative' }}
+                            style={{ flex: 1, position: 'relative', display: isMobile ? 'none' : undefined }}
                         >
                             <div style={{ position: 'absolute', left: -22, top: 1, width: 613, height: 422, background: 'rgba(0,23,54,0.05)', borderRadius: 8, transform: 'rotate(-2deg)' }} />
                             <div style={{ position: 'relative', borderRadius: 8, overflow: 'hidden', boxShadow: '0px 25px 50px -12px rgba(0,0,0,0.25)', outline: '1px solid rgba(196,198,208,0.20)' }}>
@@ -261,7 +263,7 @@ export default function TechnologyPage() {
                 </div>
 
                 {/* ── Section 2: Quote — clinical-typewriter ── */}
-                <div style={{ background: '#F3F4F5', padding: '80px 216px' }}>
+                <div style={{ background: '#F3F4F5', padding: isMobile ? '48px 20px' : '80px 216px' }}>
                     <div ref={quoteRef} style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', gap: 0 }}>
                         {/* divider-grow */}
                         <motion.div
@@ -270,13 +272,13 @@ export default function TechnologyPage() {
                             transition={{ duration: 0.45, ease: 'easeOut' }}
                             style={{ width: 4, background: '#006970', borderRadius: 2, flexShrink: 0, transformOrigin: 'top', marginRight: 32 }}
                         />
-                        <TypewriterQuote active={quoteInView} />
+                        <TypewriterQuote active={quoteInView} isMobile={isMobile} />
                     </div>
                 </div>
 
                 {/* ── Section 3: System Operational Backbone ── */}
-                <div style={{ background: '#F8F9FA', padding: '96px 24px' }}>
-                    <div ref={backboneRef} style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 64 }}>
+                <div style={{ background: '#F8F9FA', padding: isMobile ? '60px 20px' : '96px 24px' }}>
+                    <div ref={backboneRef} style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: isMobile ? 40 : 64 }}>
                         <motion.div
                             initial={{ opacity: 0, y: 16 }}
                             animate={backboneInView ? { opacity: 1, y: 0 } : {}}
@@ -291,7 +293,7 @@ export default function TechnologyPage() {
                         </motion.div>
 
                         {/* Grid */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 16 }}>
 
                             {/* Unified Clinical Data Fabric — module-slide-left */}
                             <motion.div
@@ -306,7 +308,13 @@ export default function TechnologyPage() {
                                     initial={{ opacity: 0, scale: 0.85 }}
                                     animate={backboneInView ? { opacity: 0.1, scale: 1 } : {}}
                                     transition={{ duration: 0.8, ease: ease, delay: 0.5 }}
-                                    style={{ position: 'absolute', right: -60, bottom: -40 }}
+                                    style={{
+                                        position: 'absolute',
+                                        right: isMobile ? -30 : -60,
+                                        bottom: isMobile ? -20 : -40,
+                                        transform: isMobile ? 'scale(0.55)' : undefined,
+                                        transformOrigin: 'bottom right',
+                                    }}
                                 >
                                     <IconSvg />
                                 </motion.div>
@@ -391,7 +399,7 @@ export default function TechnologyPage() {
                                 animate={backboneInView ? { opacity: 1, y: 0 } : {}}
                                 transition={{ duration: 0.6, ease: ease, delay: 0.48 }}
                                 className="card-hover-lift"
-                                style={{ padding: 32, background: 'white', borderRadius: 12, border: '1px solid rgba(196,198,208,0.40)', borderLeft: '4px solid #006970', display: 'flex', alignItems: 'center', gap: 32 }}
+                                style={{ padding: 32, background: 'white', borderRadius: 12, border: '1px solid rgba(196,198,208,0.40)', borderLeft: '4px solid #006970', display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'flex-start' : 'center', gap: isMobile ? 16 : 32 }}
                             >
                                 <div style={{ flex: 1 }}>
                                     <div style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 700, fontSize: 20, lineHeight: '28px', color: '#001736', marginBottom: 8 }}>
@@ -411,10 +419,10 @@ export default function TechnologyPage() {
                 </div>
 
                 {/* ── Section 4: AI Validation & Boundaries ── */}
-                <div style={{ background: '#F3F4F5', padding: '96px 24px' }}>
+                <div style={{ background: '#F3F4F5', padding: isMobile ? '60px 20px' : '96px 24px' }}>
                     <div
                         ref={validationRef}
-                        style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'start' }}
+                        style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 32 : 48, alignItems: 'start' }}
                     >
                         {/* Left: copy + cards — clarity-rise */}
                         <motion.div
@@ -521,13 +529,13 @@ export default function TechnologyPage() {
                 </div>
 
                 {/* ── Section 5: Technical Resources ── */}
-                <div style={{ background: '#F8F9FA', padding: '96px 24px' }}>
-                    <div ref={resourcesRef} style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 48 }}>
+                <div style={{ background: '#F8F9FA', padding: isMobile ? '60px 20px' : '96px 24px' }}>
+                    <div ref={resourcesRef} style={{ maxWidth: 1280, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: isMobile ? 32 : 48 }}>
                         <motion.div
                             initial={{ opacity: 0, y: 16 }}
                             animate={resourcesInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6, ease: sharp }}
-                            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}
+                            style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end', gap: isMobile ? 12 : 0 }}
                         >
                             <div>
                                 <div style={{ fontFamily: "'Inter', sans-serif", fontWeight: 700, fontSize: 14, lineHeight: '20px', letterSpacing: 2.8, textTransform: 'uppercase', color: '#006970', marginBottom: 16 }}>
@@ -543,7 +551,7 @@ export default function TechnologyPage() {
                         </motion.div>
 
                         {/* resource-stagger */}
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: 16 }}>
                             {resources.map((r, i) => (
                                 <motion.div
                                     key={r.title}
@@ -577,7 +585,7 @@ export default function TechnologyPage() {
                 </div>
 
                 {/* ── Section 6: CTA ── */}
-                <div style={{ background: '#001736', padding: '96px 192px', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ background: '#001736', padding: isMobile ? '60px 20px' : '96px 192px', position: 'relative', overflow: 'hidden' }}>
                     {/* Subtle grid lines */}
                     <div style={{ position: 'absolute', inset: 0, display: 'flex', opacity: 0.1, pointerEvents: 'none' }}>
                         {Array.from({ length: 12 }).map((_, i) => (
@@ -589,7 +597,7 @@ export default function TechnologyPage() {
                             initial={{ opacity: 0, y: 24 }}
                             animate={ctaInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.7, ease: ease }}
-                            style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 800, fontSize: 48, lineHeight: '48px', textAlign: 'center', margin: 0 }}
+                            style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 800, fontSize: isMobile ? 28 : 48, lineHeight: isMobile ? '36px' : '48px', textAlign: 'center', margin: 0 }}
                         >
                             <span style={{ color: 'white' }}>Review our infrastructure with your </span>
                             <span style={{ color: '#7DF4FF' }}>IT Security Council.</span>
@@ -598,7 +606,7 @@ export default function TechnologyPage() {
                             initial={{ opacity: 0, y: 12 }}
                             animate={ctaInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.5, ease: sharp, delay: 0.2 }}
-                            style={{ display: 'flex', gap: 24, justifyContent: 'center' }}
+                            style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 12 : 24, justifyContent: 'center', width: isMobile ? '100%' : undefined }}
                         >
                             <button className="btn-teal" style={{ padding: '16px 32px', background: '#006970', borderRadius: 4, border: 'none', cursor: 'pointer', fontFamily: "'Inter', sans-serif", fontWeight: 700, fontSize: 16, lineHeight: '24px', color: 'white' }}>
                                 Request Full Audit Report

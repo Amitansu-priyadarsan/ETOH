@@ -5,6 +5,12 @@
     --font-body: 'Inter', sans-serif;
 }
 
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+}
+
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }

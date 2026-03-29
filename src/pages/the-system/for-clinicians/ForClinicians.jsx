@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import PageLayout from '../../../components/PageLayout'
+import { useResponsive } from '../../../hooks/useResponsive'
 import hero1 from './assets/hero1.png'
 import section3 from './assets/section3.png'
 import {
@@ -23,6 +24,8 @@ const heroLines = [
 ]
 
 export default function ForCliniciansPage() {
+    const { isMobile } = useResponsive()
+
     // Refs
     const heroTextRef = useRef(null)
     const heroImageRef = useRef(null)
@@ -124,10 +127,10 @@ export default function ForCliniciansPage() {
             {/* ── Section 1: Hero ── */}
             <div style={{
                 width: '100%',
-                paddingLeft: 32,
-                paddingRight: 32,
-                paddingTop: 128,
-                paddingBottom: 128,
+                paddingLeft: isMobile ? 20 : 32,
+                paddingRight: isMobile ? 20 : 32,
+                paddingTop: isMobile ? 80 : 128,
+                paddingBottom: isMobile ? 64 : 128,
                 position: 'relative',
                 background: '#001736',
                 overflow: 'hidden',
@@ -155,8 +158,8 @@ export default function ForCliniciansPage() {
                     maxWidth: 1216,
                     margin: '0 auto',
                     display: 'flex',
-                    flexDirection: 'row',
-                    gap: 64,
+                    flexDirection: isMobile ? 'column' : 'row',
+                    gap: isMobile ? 40 : 64,
                     alignItems: 'flex-start',
                 }}>
                     {/* Left: text content */}
@@ -207,10 +210,10 @@ export default function ForCliniciansPage() {
                                             delay: 0.2 + i * 0.08,
                                         }}
                                         style={{
-                                            fontSize: 72,
+                                            fontSize: isMobile ? 40 : 72,
                                             fontFamily: 'Manrope, sans-serif',
                                             fontWeight: 800,
-                                            lineHeight: '72px',
+                                            lineHeight: isMobile ? '44px' : '72px',
                                             color: 'white',
                                         }}
                                     >
@@ -228,10 +231,10 @@ export default function ForCliniciansPage() {
                             style={{
                                 maxWidth: 512,
                                 color: '#7594CA',
-                                fontSize: 20,
+                                fontSize: isMobile ? 16 : 20,
                                 fontFamily: 'Inter, sans-serif',
                                 fontWeight: 400,
-                                lineHeight: '32.5px',
+                                lineHeight: isMobile ? '26px' : '32.5px',
                             }}>
                             Clinical decisions happen at the bedside, in the
                             corridor, and between consultations. ETOH goes
@@ -295,9 +298,10 @@ export default function ForCliniciansPage() {
                     {/* Right: image card — device-activate */}
                     <div ref={heroImageRef} style={{
                         flex: '0 0 auto',
-                        maxWidth: 710,
+                        maxWidth: isMobile ? '100%' : 710,
+                        width: isMobile ? '100%' : undefined,
                         position: 'relative',
-                        display: 'flex',
+                        display: isMobile ? 'none' : 'flex',
                         flexDirection: 'column',
                     }}>
                         {/* Glow */}
@@ -465,11 +469,11 @@ export default function ForCliniciansPage() {
                     style={{
                         maxWidth: 1280,
                         margin: '0 auto',
-                        paddingLeft: 32,
-                        paddingRight: 32,
+                        paddingLeft: isMobile ? 20 : 32,
+                        paddingRight: isMobile ? 20 : 32,
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: 80,
+                        gap: isMobile ? 40 : 80,
                     }}>
                     {/* Title */}
                     <motion.div
@@ -496,7 +500,7 @@ export default function ForCliniciansPage() {
                     </motion.div>
 
                     {/* Comparison cards */}
-                    <div style={{ display: 'flex', flexDirection: 'row', gap: 24, alignItems: 'stretch' }}>
+                    <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: 24, alignItems: 'stretch' }}>
                         {/* Legacy Workflow — comparison-slide-left */}
                         <motion.div
                             initial={{ opacity: 0, x: -40 }}
@@ -505,10 +509,10 @@ export default function ForCliniciansPage() {
                             className="hover-raise"
                             style={{
                                 flex: 1,
-                                paddingTop: 48,
-                                paddingBottom: 80,
-                                paddingLeft: 48,
-                                paddingRight: 48,
+                                paddingTop: isMobile ? 28 : 48,
+                                paddingBottom: isMobile ? 28 : 80,
+                                paddingLeft: isMobile ? 24 : 48,
+                                paddingRight: isMobile ? 24 : 48,
                                 background: '#F3F4F5',
                                 borderRadius: 16,
                                 borderLeft: '4px rgba(196, 198, 208, 0.30) solid',
@@ -576,10 +580,10 @@ export default function ForCliniciansPage() {
                             className="dark-hover-raise glass-sweep"
                             style={{
                                 flex: 1,
-                                paddingTop: 80,
-                                paddingBottom: 48,
-                                paddingLeft: 48,
-                                paddingRight: 48,
+                                paddingTop: isMobile ? 28 : 80,
+                                paddingBottom: isMobile ? 28 : 48,
+                                paddingLeft: isMobile ? 24 : 48,
+                                paddingRight: isMobile ? 24 : 48,
                                 position: 'relative',
                                 background: '#001736',
                                 boxShadow: '0px 25px 50px -12px rgba(0, 0, 0, 0.25)',
@@ -685,12 +689,12 @@ export default function ForCliniciansPage() {
                     style={{
                         maxWidth: 1280,
                         margin: '0 auto',
-                        paddingLeft: 32,
-                        paddingRight: 32,
+                        paddingLeft: isMobile ? 20 : 32,
+                        paddingRight: isMobile ? 20 : 32,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        gap: 80,
+                        gap: isMobile ? 40 : 80,
                     }}>
                     {/* Header */}
                     <motion.div
@@ -743,8 +747,8 @@ export default function ForCliniciansPage() {
                     <div style={{
                         width: '100%',
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(3, 1fr)',
-                        gridTemplateRows: 'auto auto',
+                        gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+                        gridTemplateRows: 'auto',
                         gap: 16,
                     }}>
                         {/* Row 1 */}
@@ -918,14 +922,15 @@ export default function ForCliniciansPage() {
                                 transition={{ duration: 0.5, ease: ease, delay: 0.3 }}
                                 className="hover-raise"
                                 style={{
-                                    padding: 32,
+                                    padding: isMobile ? 20 : 32,
                                     background: 'white',
                                     borderRadius: 16,
                                     border: '1px solid rgba(196, 198, 208, 0.40)',
                                     display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 32,
-                                    gridColumn: 'span 2',
+                                    flexDirection: isMobile ? 'column' : 'row',
+                                    alignItems: isMobile ? 'flex-start' : 'center',
+                                    gap: isMobile ? 16 : 32,
+                                    gridColumn: isMobile ? 'span 1' : 'span 2',
                                 }}>
                                 <div style={{
                                     width: 128,
@@ -1019,10 +1024,10 @@ export default function ForCliniciansPage() {
                 ref={closingRef}
                 style={{
                     width: '100%',
-                    paddingLeft: 32,
-                    paddingRight: 32,
-                    paddingTop: 96,
-                    paddingBottom: 96,
+                    paddingLeft: isMobile ? 20 : 32,
+                    paddingRight: isMobile ? 20 : 32,
+                    paddingTop: isMobile ? 60 : 96,
+                    paddingBottom: isMobile ? 60 : 96,
                     background: '#F8F9FA',
                     boxSizing: 'border-box',
                 }}>
@@ -1030,8 +1035,8 @@ export default function ForCliniciansPage() {
                     maxWidth: 1216,
                     margin: '0 auto',
                     display: 'flex',
-                    flexDirection: 'row',
-                    gap: 0,
+                    flexDirection: isMobile ? 'column' : 'row',
+                    gap: isMobile ? 48 : 0,
                 }}>
                     {/* Left: text + steps — workflow-stagger */}
                     <div ref={stepsRef} style={{
@@ -1106,7 +1111,7 @@ export default function ForCliniciansPage() {
                                     transition={{ duration: 0.45, ease: ease, delay: 0.3 + i * 0.15 }}
                                     className="hover-raise"
                                     style={{
-                                        width: i === 0 ? '100%' : i === 1 ? 'calc(100% - 32px)' : 'calc(100% - 48px)',
+                                        width: isMobile ? '100%' : (i === 0 ? '100%' : i === 1 ? 'calc(100% - 32px)' : 'calc(100% - 48px)'),
                                         padding: 24,
                                         background: 'white',
                                         borderRadius: 4,
@@ -1138,7 +1143,7 @@ export default function ForCliniciansPage() {
                     {/* Right: The Loop Is Sealed card */}
                     <div style={{
                         flex: 1,
-                        padding: 48,
+                        padding: isMobile ? 0 : 48,
                         position: 'relative',
                         display: 'flex',
                         justifyContent: 'center',
@@ -1168,8 +1173,8 @@ export default function ForCliniciansPage() {
                             style={{
                                 width: '100%',
                                 maxWidth: 448,
-                                paddingTop: 111,
-                                paddingBottom: 111,
+                                paddingTop: isMobile ? 48 : 111,
+                                paddingBottom: isMobile ? 48 : 111,
                                 position: 'relative',
                                 background: 'rgba(255, 255, 255, 0.80)',
                                 borderRadius: 12,
@@ -1187,6 +1192,7 @@ export default function ForCliniciansPage() {
                                 animate={confirmInView ? { y: 0, opacity: 1 } : {}}
                                 transition={{ duration: 0.8, ease: ease, delay: 0.2 }}
                                 style={{
+                                    display: isMobile ? 'none' : 'flex',
                                     position: 'absolute',
                                     top: -24,
                                     left: '50%',
@@ -1216,6 +1222,7 @@ export default function ForCliniciansPage() {
                                 animate={confirmInView ? { x: 0, opacity: 1 } : {}}
                                 transition={{ duration: 0.8, ease: ease, delay: 0.35 }}
                                 style={{
+                                    display: isMobile ? 'none' : 'flex',
                                     position: 'absolute',
                                     bottom: 60,
                                     left: -24,
@@ -1239,6 +1246,7 @@ export default function ForCliniciansPage() {
                                 animate={confirmInView ? { x: 0, opacity: 1 } : {}}
                                 transition={{ duration: 0.8, ease: ease, delay: 0.5 }}
                                 style={{
+                                    display: isMobile ? 'none' : 'flex',
                                     position: 'absolute',
                                     bottom: 60,
                                     right: -24,

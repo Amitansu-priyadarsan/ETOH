@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import PageLayout from '../../../components/PageLayout'
 import { useInView } from '../../../hooks/useInView'
+import { useResponsive } from '../../../hooks/useResponsive'
 import labImg from './section2.png'
 
 const outcomeMeasures = [
@@ -94,6 +95,7 @@ function useCounter(target, inView, duration = 1400, delay = 300) {
 }
 
 export default function ClinicalEvidencePage() {
+    const { isMobile } = useResponsive()
     const [mounted, setMounted] = useState(false)
     useEffect(() => {
         const t = setTimeout(() => setMounted(true), 60)
@@ -112,11 +114,11 @@ export default function ClinicalEvidencePage() {
     return (
         <PageLayout fullWidth lightHero>
             <div style={{ background: 'white', minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
-                <div style={{ width: '100%', paddingLeft: 32, paddingRight: 32, paddingTop: 80, paddingBottom: 80 }}>
+                <div style={{ width: '100%', paddingLeft: isMobile ? 20 : 32, paddingRight: isMobile ? 20 : 32, paddingTop: isMobile ? 48 : 80, paddingBottom: isMobile ? 48 : 80 }}>
                 <div style={{ maxWidth: 1216, marginLeft: 'auto', marginRight: 'auto' }}>
 
                     {/* ── Section 1: Hero ── */}
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 72, marginBottom: 128 }}>
+                    <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: 'flex-start', gap: isMobile ? 32 : 72, marginBottom: isMobile ? 64 : 128 }}>
 
                         {/* Left: copy */}
                         <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 24 }}>
@@ -141,8 +143,8 @@ export default function ClinicalEvidencePage() {
                             <div style={{
                                 fontFamily: "'Manrope', sans-serif",
                                 fontWeight: 800,
-                                fontSize: 52,
-                                lineHeight: '58px',
+                                fontSize: isMobile ? 32 : 52,
+                                lineHeight: isMobile ? '40px' : '58px',
                                 color: '#001736',
                                 margin: 0,
                             }}>
@@ -187,8 +189,9 @@ export default function ClinicalEvidencePage() {
                         <div
                             className={mounted ? 'soft-fade-up' : ''}
                             style={{
-                                flex: '0 0 520px',
-                                height: 560,
+                                flex: isMobile ? 'none' : '0 0 520px',
+                                width: isMobile ? '100%' : undefined,
+                                height: isMobile ? 240 : 560,
                                 borderRadius: 8,
                                 overflow: 'hidden',
                                 position: 'relative',
@@ -209,7 +212,7 @@ export default function ClinicalEvidencePage() {
                     {/* ── Section 2: Honest record ── */}
                     <div
                         ref={sec2Ref}
-                        style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'center', marginBottom: 128 }}
+                        style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 32 : 80, alignItems: 'center', marginBottom: isMobile ? 64 : 128 }}
                     >
                         {/* Left: image — focus-in */}
                         <div
@@ -284,7 +287,7 @@ export default function ClinicalEvidencePage() {
                     {/* ── Section 3: Primary Outcome Measures ── */}
                     <div
                         ref={sec3Ref}
-                        style={{ display: 'flex', flexDirection: 'column', gap: 48, marginBottom: 128 }}
+                        style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 32 : 48, marginBottom: isMobile ? 64 : 128 }}
                     >
                         {/* Section label */}
                         <div
@@ -303,7 +306,7 @@ export default function ClinicalEvidencePage() {
                         </div>
 
                         {/* 4 principle cards */}
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+                        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: 16 }}>
                             {outcomeMeasures.map((item, i) => (
                                 <div
                                     key={item.title}
@@ -351,7 +354,7 @@ export default function ClinicalEvidencePage() {
                     </div>
 
                     {/* ── Section 4: Publications + Outcomes + Table ── */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 48, alignItems: 'start' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '280px 1fr', gap: isMobile ? 40 : 48, alignItems: 'start' }}>
 
                         {/* Left: Publications */}
                         <div ref={pubRef} style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
@@ -411,7 +414,7 @@ export default function ClinicalEvidencePage() {
                                 ref={studyRef}
                                 className={`glass-sweep-auto${studyVisible ? ' study-card-rise' : ''}`}
                                 style={{
-                                    padding: 48,
+                                    padding: isMobile ? 24 : 48,
                                     background: '#001736',
                                     borderRadius: 8,
                                     position: 'relative',
@@ -433,7 +436,7 @@ export default function ClinicalEvidencePage() {
                                 </p>
 
                                 {/* Stats row */}
-                                <div style={{ display: 'flex', gap: 64, paddingTop: 16, position: 'relative' }}>
+                                <div style={{ display: 'flex', gap: isMobile ? 32 : 64, paddingTop: 16, position: 'relative' }}>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                                         <div
                                             className={studyVisible ? 'verification-confirm' : ''}
