@@ -736,15 +736,21 @@ export default function EndtoEndCarePage() {
                         </motion.div>
                     </div>
 
-                    {/* Two cards — care-card-left / care-card-right */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+                    {/* Two cards — care-card-left / care-card-right (mobile responsive) */}
+                    <div
+                        style={{
+                            display: 'grid',
+                            gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+                            gap: isMobile ? 20 : 24,
+                        }}
+                    >
                         <motion.div
-                            initial={{ opacity: 0, x: -40 }}
+                            initial={{ opacity: 0, x: isMobile ? 0 : -40 }}
                             animate={continuousInView ? { opacity: 1, x: 0 } : {}}
                             transition={{ duration: 0.8, ease: ease, delay: 0.2 }}
                             className="glass-card"
                             style={{
-                                padding: '47px 41px',
+                                padding: isMobile ? '28px 16px' : '47px 41px',
                                 background: 'rgba(255, 255, 255, 0.05)',
                                 borderRadius: 8,
                                 outline: '1px rgba(255, 255, 255, 0.10) solid',
@@ -753,38 +759,46 @@ export default function EndtoEndCarePage() {
                                 display: 'flex',
                                 flexDirection: 'column',
                                 gap: 0,
-                            }}>
-                            <div style={{
-                                width: 48,
-                                height: 48,
-                                background: 'rgba(0, 105, 112, 0.30)',
-                                borderRadius: 12,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                marginBottom: 32,
-                            }}>
-                                <svg width="24" height="27" viewBox="0 0 24 27" fill="none">
-                                    <path d="M3 3h18v12a9 9 0 01-18 0V3z" stroke="#006970" strokeWidth="2" strokeLinejoin="round"/>
+                                minWidth: 0,
+                            }}
+                        >
+                            <div
+                                style={{
+                                    width: isMobile ? 40 : 48,
+                                    height: isMobile ? 40 : 48,
+                                    background: 'rgba(0, 105, 112, 0.30)',
+                                    borderRadius: 12,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    marginBottom: isMobile ? 20 : 32,
+                                }}
+                            >
+                                <svg width={isMobile ? '20' : '24'} height={isMobile ? '22' : '27'} viewBox="0 0 24 27" fill="none">
+                                    <path d="M3 3h18v12a9 9 0 01-18 0V3z" stroke="#006970" strokeWidth="2" strokeLinejoin="round" />
                                 </svg>
                             </div>
-                            <div style={{
-                                color: 'white',
-                                fontSize: 24,
-                                fontFamily: 'Manrope, sans-serif',
-                                fontWeight: 700,
-                                lineHeight: '32px',
-                                marginBottom: 16,
-                            }}>
+                            <div
+                                style={{
+                                    color: 'white',
+                                    fontSize: isMobile ? 18 : 24,
+                                    fontFamily: 'Manrope, sans-serif',
+                                    fontWeight: 700,
+                                    lineHeight: isMobile ? '26px' : '32px',
+                                    marginBottom: isMobile ? 10 : 16,
+                                }}
+                            >
                                 Post-Discharge Intelligence
                             </div>
-                            <div style={{
-                                color: '#7594CA',
-                                fontSize: 16,
-                                fontFamily: 'Inter, sans-serif',
-                                fontWeight: 400,
-                                lineHeight: '26px',
-                            }}>
+                            <div
+                                style={{
+                                    color: '#7594CA',
+                                    fontSize: isMobile ? 14 : 16,
+                                    fontFamily: 'Inter, sans-serif',
+                                    fontWeight: 400,
+                                    lineHeight: isMobile ? '22px' : '26px',
+                                }}
+                            >
                                 Our platform maintains a direct telemetry link with patients post-discharge,
                                 alerting clinical teams to early markers of regression before they become
                                 emergencies.
@@ -792,12 +806,12 @@ export default function EndtoEndCarePage() {
                         </motion.div>
 
                         <motion.div
-                            initial={{ opacity: 0, x: 40 }}
+                            initial={{ opacity: 0, x: isMobile ? 0 : 40 }}
                             animate={continuousInView ? { opacity: 1, x: 0 } : {}}
                             transition={{ duration: 0.8, ease: ease, delay: 0.35 }}
                             className="glass-card"
                             style={{
-                                padding: '47px 41px',
+                                padding: isMobile ? '28px 16px' : '47px 41px',
                                 background: 'rgba(255, 255, 255, 0.05)',
                                 borderRadius: 8,
                                 outline: '1px rgba(255, 255, 255, 0.10) solid',
@@ -806,38 +820,46 @@ export default function EndtoEndCarePage() {
                                 display: 'flex',
                                 flexDirection: 'column',
                                 gap: 0,
-                            }}>
-                            <div style={{
-                                width: 48,
-                                height: 48,
-                                background: 'rgba(0, 105, 112, 0.30)',
-                                borderRadius: 12,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                marginBottom: 32,
-                            }}>
-                                <svg width="30" height="24" viewBox="0 0 30 24" fill="none">
-                                    <path d="M15 2C8.373 2 3 7.373 3 14s5.373 12 12 12 12-5.373 12-12S21.627 2 15 2zm0 4l4 6h-8l4-6z" fill="#006970"/>
+                                minWidth: 0,
+                            }}
+                        >
+                            <div
+                                style={{
+                                    width: isMobile ? 40 : 48,
+                                    height: isMobile ? 40 : 48,
+                                    background: 'rgba(0, 105, 112, 0.30)',
+                                    borderRadius: 12,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    marginBottom: isMobile ? 20 : 32,
+                                }}
+                            >
+                                <svg width={isMobile ? '24' : '30'} height={isMobile ? '18' : '24'} viewBox="0 0 30 24" fill="none">
+                                    <path d="M15 2C8.373 2 3 7.373 3 14s5.373 12 12 12 12-5.373 12-12S21.627 2 15 2zm0 4l4 6h-8l4-6z" fill="#006970" />
                                 </svg>
                             </div>
-                            <div style={{
-                                color: 'white',
-                                fontSize: 24,
-                                fontFamily: 'Manrope, sans-serif',
-                                fontWeight: 700,
-                                lineHeight: '32px',
-                                marginBottom: 16,
-                            }}>
+                            <div
+                                style={{
+                                    color: 'white',
+                                    fontSize: isMobile ? 18 : 24,
+                                    fontFamily: 'Manrope, sans-serif',
+                                    fontWeight: 700,
+                                    lineHeight: isMobile ? '26px' : '32px',
+                                    marginBottom: isMobile ? 10 : 16,
+                                }}
+                            >
                                 The Digital Lifeline
                             </div>
-                            <div style={{
-                                color: '#7594CA',
-                                fontSize: 16,
-                                fontFamily: 'Inter, sans-serif',
-                                fontWeight: 400,
-                                lineHeight: '26px',
-                            }}>
+                            <div
+                                style={{
+                                    color: '#7594CA',
+                                    fontSize: isMobile ? 14 : 16,
+                                    fontFamily: 'Inter, sans-serif',
+                                    fontWeight: 400,
+                                    lineHeight: isMobile ? '22px' : '26px',
+                                }}
+                            >
                                 Wearable integration and patient-reported outcomes (PROMs) ensure that
                                 &quot;care&quot; doesn&apos;t end when the patient leaves the ward. We extend
                                 the clinical perimeter.

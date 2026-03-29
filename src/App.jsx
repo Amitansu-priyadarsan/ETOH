@@ -45,15 +45,33 @@ export default function App() {
 
     return (
         <div style={{ position: 'relative', width: '100vw', height: '100dvh', overflow: 'hidden', background: '#000' }}>
+            <style>{`
+                video {
+                    display: block;
+                }
+                /* Hide native video controls on all platforms */
+                video::-webkit-media-controls {
+                    display: none !important;
+                }
+                video::--webkit-media-controls-panel {
+                    display: none !important;
+                }
+                @supports (-webkit-appearance: none) {
+                    video {
+                        -webkit-appearance: none;
+                    }
+                }
+            `}</style>
 
             {/* Fullscreen video */}
             <video
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
                 src={videoSrc}
                 autoPlay
                 loop
                 muted
                 playsInline
+                controls={false}
             />
 
             {/* Gradient overlay — heavy at bottom for legibility */}
