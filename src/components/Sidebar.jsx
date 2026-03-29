@@ -351,7 +351,6 @@ export default function Sidebar({ open, onClose }) {
                         ))}
                     </nav>
 
-                    <SocialIcons isMobile={isMobile} />
                 </div>
 
                 {/* MIDDLE PANEL — level 2 submenu (desktop only) */}

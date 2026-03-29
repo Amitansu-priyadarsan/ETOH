@@ -90,7 +90,7 @@ export default function CareersPage() {
     const [ctaRef, ctaVisible]         = useInView()
 
     return (
-        <PageLayout title="Careers" fullWidth={true}>
+        <PageLayout title="Careers" fullWidth={true} lightHero>
 
             {/* ── Section 1: Hero ─────────────────────────────────────── */}
             <div style={{

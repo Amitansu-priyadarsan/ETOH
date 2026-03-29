@@ -25,7 +25,7 @@ export default function PublicHealthMissionPage() {
     const xLg = isMobile ? 24 : 80
 
     return (
-        <PageLayout title="Public Health Mission" fullWidth={true}>
+        <PageLayout title="Public Health Mission" fullWidth={true} lightHero>
             <style>{`
                 @keyframes glassSweep {
                     0%   { left: -70%; }

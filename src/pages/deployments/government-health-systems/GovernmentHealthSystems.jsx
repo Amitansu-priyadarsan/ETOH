@@ -1,9 +1,90 @@
+import { useRef, useState, useEffect } from 'react'
 import PageLayout from '../../../components/PageLayout'
 import { useResponsive } from '../../../hooks/useResponsive'
 import govtImg from '../../../assets/Govthealthsystem.png'
 import govtHospitalImg from '../../../assets/Govthospital.png'
 import Bedicon from './icons/Bedicon'
 import Resourceicon from './icons/Resourceicon'
+
+const GHS_KEYFRAMES = `
+  @keyframes ghs-grid-drift {
+    0%   { transform: translate(0, 0); }
+    100% { transform: translate(48px, 48px); }
+  }
+  @keyframes ghs-bg-reveal {
+    from { opacity: 0; transform: scale(1.06); filter: blur(8px); }
+    to   { opacity: 0.10; transform: scale(1); filter: blur(0); }
+  }
+  @keyframes ghs-line-1 {
+    from { opacity: 0; transform: translateX(-14px); filter: blur(8px); }
+    to   { opacity: 1; transform: translateX(0);     filter: blur(0);   }
+  }
+  @keyframes ghs-line-2 {
+    from { opacity: 0; transform: translateX(10px);  filter: blur(8px); }
+    to   { opacity: 1; transform: translateX(0);     filter: blur(0);   }
+  }
+  @keyframes ghs-line-3 {
+    from { opacity: 0; transform: translateX(-9px);  filter: blur(8px); }
+    to   { opacity: 1; transform: translateX(0);     filter: blur(0);   }
+  }
+  @keyframes ghs-line-4 {
+    from { opacity: 0; transform: translateX(12px);  filter: blur(8px); }
+    to   { opacity: 1; transform: translateX(0);     filter: blur(0);   }
+  }
+  @keyframes ghs-sub-fade {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+  @keyframes ghs-button-rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+  @keyframes ghs-eyebrow-fade {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0);   }
+  }
+
+  /* Section 4 */
+  @keyframes ghs-header-rise {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+  @keyframes ghs-divider-draw {
+    from { width: 0; }
+    to   { width: 96px; }
+  }
+  @keyframes ghs-table-head {
+    from { opacity: 0; transform: translateX(-20px); }
+    to   { opacity: 1; transform: translateX(0);     }
+  }
+  @keyframes ghs-row-enter {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0);    }
+  }
+
+  .ghs-btn {
+    transition: transform 0.22s cubic-bezier(0.22,1,0.36,1),
+                box-shadow 0.22s cubic-bezier(0.22,1,0.36,1);
+  }
+  .ghs-btn-primary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 10px 28px rgba(0,105,112,0.40) !important;
+  }
+  .ghs-btn-ghost:hover {
+    transform: translateY(-2px) !important;
+    background: rgba(255,255,255,0.08) !important;
+  }
+  .ghs-table-row {
+    transition: background 0.18s ease;
+  }
+  .ghs-table-row:hover {
+    background: #F8F9FA !important;
+  }
+`
+
+const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)'
+const anim = (name, duration, delayMs, easing = EASE) =>
+    `${name} ${duration} ${easing} ${delayMs}ms both`
 
 const ClinicalRegisterIcon = () => (
     <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -14,8 +95,23 @@ const ClinicalRegisterIcon = () => (
 export default function GovernmentHealthSystemsPage() {
     const { isMobile, isTablet } = useResponsive()
 
+    const gapRef = useRef(null)
+    const [gapVisible, setGapVisible] = useState(false)
+
+    useEffect(() => {
+        const el = gapRef.current
+        if (!el) return
+        const obs = new IntersectionObserver(
+            ([entry]) => { if (entry.isIntersecting) { setGapVisible(true); obs.disconnect() } },
+            { threshold: 0.08 }
+        )
+        obs.observe(el)
+        return () => obs.disconnect()
+    }, [])
+
     return (
         <PageLayout title="Government Health Systems" fullWidth={true}>
+            <style>{GHS_KEYFRAMES}</style>
 
             {/* Section 1: Hero */}
             <div style={{
@@ -32,17 +128,29 @@ export default function GovernmentHealthSystemsPage() {
                 alignItems: 'flex-start',
                 display: 'flex',
             }}>
-                {/* Background image overlay */}
+                {/* Animated grid overlay — same as PHN */}
+                <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
+                    backgroundSize: '64px 64px',
+                    animation: 'ghs-grid-drift 18s linear infinite',
+                    pointerEvents: 'none',
+                    zIndex: 1,
+                }} />
+
+                {/* Background image overlay — ghs-bg-reveal */}
                 <div style={{
                     width: '100%',
                     height: '100%',
                     left: 0,
                     top: 0,
                     position: 'absolute',
-                    opacity: 0.10,
                     mixBlendMode: 'overlay',
                     pointerEvents: 'none',
                     overflow: 'hidden',
+                    zIndex: 0,
+                    animation: anim('ghs-bg-reveal', '1.6s', 0, 'cubic-bezier(0.25,0.46,0.45,0.94)'),
                 }}>
                     <img
                         src={govtImg}
@@ -61,8 +169,9 @@ export default function GovernmentHealthSystemsPage() {
                     gap: 24,
                     display: 'flex',
                     position: 'relative',
-                    zIndex: 1,
+                    zIndex: 2,
                 }}>
+                    {/* Eyebrow */}
                     <div style={{
                         color: '#006970',
                         fontSize: 12,
@@ -71,10 +180,12 @@ export default function GovernmentHealthSystemsPage() {
                         textTransform: 'uppercase',
                         lineHeight: '16px',
                         letterSpacing: 2.40,
+                        animation: anim('ghs-eyebrow-fade', '0.7s', 60),
                     }}>
                         Government Health Systems
                     </div>
 
+                    {/* Heading — ghs-line stagger, same alternating-side pattern as PHN */}
                     <div style={{
                         alignSelf: 'stretch',
                         fontFamily: 'Manrope',
@@ -83,15 +194,23 @@ export default function GovernmentHealthSystemsPage() {
                         lineHeight: isMobile ? '48px' : isTablet ? '64px' : '72px',
                         wordWrap: 'break-word',
                     }}>
-                        <span style={{ color: 'white' }}>
-                            Where healthcare access matters most, the operating infrastructure has always been weakest.{' '}
-                        </span>
-                        <span style={{ color: '#7594CA' }}>
-                            We are changing that.
-                        </span>
+                        <div style={{ color: 'white', animation: anim('ghs-line-1', '1.0s', 120) }}>
+                            Where healthcare access
+                        </div>
+                        <div style={{ color: 'white', animation: anim('ghs-line-2', '1.0s', 220) }}>
+                            matters most, the operating
+                        </div>
+                        <div style={{ color: 'white', animation: anim('ghs-line-3', '1.0s', 320) }}>
+                            infrastructure has always
+                        </div>
+                        <div style={{ animation: anim('ghs-line-4', '1.0s', 440) }}>
+                            <span style={{ color: 'white' }}>been weakest. </span>
+                            <span style={{ color: '#7594CA' }}>We are changing that.</span>
+                        </div>
                     </div>
 
-                    <div style={{ maxWidth: 768, paddingTop: 8 }}>
+                    {/* Subtitle — ghs-sub-fade */}
+                    <div style={{ maxWidth: 768, paddingTop: 8, animation: anim('ghs-sub-fade', '0.9s', 560) }}>
                         <div style={{
                             color: '#7594CA',
                             fontSize: isMobile ? 18 : 24,
@@ -389,15 +508,18 @@ export default function GovernmentHealthSystemsPage() {
                 flexDirection: 'column',
                 alignItems: 'flex-start',
             }}>
-                <div style={{
-                    width: '100%',
-                    maxWidth: 1216,
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 64,
-                }}>
+                <div
+                    ref={gapRef}
+                    style={{
+                        width: '100%',
+                        maxWidth: 1216,
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 64,
+                    }}
+                >
                     {/* Section header */}
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
                         <div style={{
@@ -407,10 +529,18 @@ export default function GovernmentHealthSystemsPage() {
                             fontFamily: 'Manrope',
                             fontWeight: '700',
                             lineHeight: '40px',
+                            animation: gapVisible ? anim('ghs-header-rise', '0.75s', 0) : 'none',
+                            opacity: gapVisible ? undefined : 0,
                         }}>
                             Closing the Infrastructure Gap
                         </div>
-                        <div style={{ width: 96, height: 4, background: '#006970' }} />
+                        <div style={{
+                            height: 4,
+                            background: '#006970',
+                            borderRadius: 2,
+                            animation: gapVisible ? anim('ghs-divider-draw', '0.55s', 180, 'cubic-bezier(0.25,0.46,0.45,0.94)') : 'none',
+                            width: gapVisible ? 96 : 0,
+                        }} />
                     </div>
 
                     {/* Table */}
@@ -428,6 +558,8 @@ export default function GovernmentHealthSystemsPage() {
                             borderTopLeftRadius: 4,
                             borderTopRightRadius: 4,
                             gap: isMobile ? 4 : 0,
+                            animation: gapVisible ? anim('ghs-table-head', '0.65s', 260) : 'none',
+                            opacity: gapVisible ? undefined : 0,
                         }}>
                             {['Operational Domain', 'Legacy State', 'ETOH Integrated State'].map((col) => (
                                 <div key={col} style={{
@@ -444,7 +576,7 @@ export default function GovernmentHealthSystemsPage() {
                             ))}
                         </div>
 
-                        {/* Data rows */}
+                        {/* Data rows — ghs-row-enter stagger */}
                         {[
                             {
                                 domain: 'Capacity & Bed Management',
@@ -468,18 +600,24 @@ export default function GovernmentHealthSystemsPage() {
                                 isLast: true,
                             },
                         ].map((row, i) => (
-                            <div key={i} style={{
-                                display: 'grid',
-                                gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr',
-                                paddingLeft: 32,
-                                paddingRight: 32,
-                                paddingTop: 40,
-                                paddingBottom: 40,
-                                background: 'white',
-                                borderBottomLeftRadius: row.isLast ? 4 : 0,
-                                borderBottomRightRadius: row.isLast ? 4 : 0,
-                                gap: isMobile ? 24 : 0,
-                            }}>
+                            <div
+                                key={i}
+                                className="ghs-table-row"
+                                style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr',
+                                    paddingLeft: 32,
+                                    paddingRight: 32,
+                                    paddingTop: 40,
+                                    paddingBottom: 40,
+                                    background: 'white',
+                                    borderBottomLeftRadius: row.isLast ? 4 : 0,
+                                    borderBottomRightRadius: row.isLast ? 4 : 0,
+                                    gap: isMobile ? 24 : 0,
+                                    animation: gapVisible ? anim('ghs-row-enter', '0.65s', 360 + i * 110) : 'none',
+                                    opacity: gapVisible ? undefined : 0,
+                                }}
+                            >
                                 {/* Domain */}
                                 <div style={{ paddingRight: 32, display: 'flex', flexDirection: 'column', gap: 16 }}>
                                     {row.icon}

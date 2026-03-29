@@ -133,7 +133,7 @@ export default function TechnologyPage() {
     const ctaInView = useInView(ctaRef, { once: true, amount: 0.3 })
 
     return (
-        <PageLayout fullWidth>
+        <PageLayout fullWidth lightHero>
             <style>{`
                 @keyframes glassSweep {
                     0%   { left: -70%; }

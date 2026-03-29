@@ -241,3 +241,94 @@ textarea {
 .module-stagger.visible > *:nth-child(2) { animation: panelSnap 0.6s 0.17s cubic-bezier(0.34,1.3,0.64,1) forwards; }
 .module-stagger.visible > *:nth-child(3) { animation: panelSnap 0.6s 0.29s cubic-bezier(0.34,1.3,0.64,1) forwards; }
 .module-stagger.visible > *:nth-child(4) { animation: panelSnap 0.6s 0.41s cubic-bezier(0.34,1.3,0.64,1) forwards; }
+
+/* ===== Clinical Evidence Page Animations ===== */
+
+@keyframes evidenceReveal {
+    from { opacity: 0; transform: translateY(20px); filter: blur(6px); }
+    to   { opacity: 1; transform: translateY(0);    filter: blur(0);   }
+}
+@keyframes softFadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes statementSlide {
+    from { opacity: 0; transform: translateX(32px); }
+    to   { opacity: 1; transform: translateX(0);    }
+}
+@keyframes principleEnter {
+    from { opacity: 0; transform: translateY(20px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+@keyframes dividerRise {
+    from { transform: scaleY(0); }
+    to   { transform: scaleY(1); }
+}
+@keyframes imgFocusIn {
+    from { opacity: 0; filter: blur(8px); transform: scale(1.06); }
+    to   { opacity: 1; filter: blur(0);   transform: scale(1);    }
+}
+@keyframes citationReveal {
+    from { opacity: 0; transform: translateX(-16px); }
+    to   { opacity: 1; transform: translateX(0);     }
+}
+@keyframes studyCardRise {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes tableRowReveal {
+    from { opacity: 0; transform: translateX(12px); }
+    to   { opacity: 1; transform: translateX(0);    }
+}
+@keyframes verificationConfirm {
+    from { opacity: 0; transform: scale(0.8); }
+    to   { opacity: 1; transform: scale(1);   }
+}
+@keyframes progressPulse {
+    0%, 100% { opacity: 1;    }
+    50%       { opacity: 0.3; }
+}
+@keyframes glassSweepLoop {
+    0%, 82%, 100% { left: -100%; opacity: 0; }
+    84%            { opacity: 0.7;            }
+    96%            { opacity: 0.5; left: 150%; }
+    98%            { opacity: 0;               }
+}
+
+.evidence-reveal      { animation: evidenceReveal  0.65s cubic-bezier(0.22,1,0.36,1) both; }
+.soft-fade-up         { animation: softFadeUp       0.70s cubic-bezier(0.22,1,0.36,1) both; }
+.statement-slide      { animation: statementSlide   0.65s cubic-bezier(0.22,1,0.36,1) both; }
+.principle-enter      { animation: principleEnter   0.60s cubic-bezier(0.22,1,0.36,1) both; }
+.divider-rise         { transform-origin: bottom center; animation: dividerRise 0.60s cubic-bezier(0.22,1,0.36,1) both; }
+.img-focus-in         { animation: imgFocusIn       1.00s cubic-bezier(0.22,1,0.36,1) both; }
+.citation-reveal      { animation: citationReveal   0.55s cubic-bezier(0.22,1,0.36,1) both; }
+.study-card-rise      { animation: studyCardRise    0.70s cubic-bezier(0.22,1,0.36,1) both; }
+.table-row-reveal     { animation: tableRowReveal   0.50s cubic-bezier(0.22,1,0.36,1) both; }
+.verification-confirm { animation: verificationConfirm 0.45s cubic-bezier(0.34,1.4,0.64,1) both; }
+.progress-pulse-dot   { animation: progressPulse 1.8s ease-in-out infinite; }
+
+/* Evidence principle cards — subtle lift on hover */
+.evidence-card-hover {
+    transition: transform 0.28s cubic-bezier(0.22,1,0.36,1),
+                box-shadow 0.28s cubic-bezier(0.22,1,0.36,1),
+                border-color 0.28s ease;
+}
+.evidence-card-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px -8px rgba(0,23,54,0.13);
+    border-color: #006970 !important;
+}
+
+/* Dark outcome card — periodic light sweep */
+.glass-sweep-auto { position: relative; overflow: hidden; }
+.glass-sweep-auto::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 55%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+    pointer-events: none;
+    animation: glassSweepLoop 7s 2s ease-in-out infinite;
+}

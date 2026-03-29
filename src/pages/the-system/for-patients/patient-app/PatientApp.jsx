@@ -209,7 +209,7 @@ export default function PatientAppPage() {
     }, [clinicalVisible])
 
     return (
-        <PageLayout fullWidth>
+        <PageLayout fullWidth lightHero>
             <style>{KF}</style>
             <div style={{ background: 'white', minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
                 <div style={{ maxWidth: 1184, margin: '0 auto', padding: '64px 24px 80px' }}>

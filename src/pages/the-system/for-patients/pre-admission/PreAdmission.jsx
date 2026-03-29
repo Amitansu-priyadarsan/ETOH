@@ -297,7 +297,7 @@ export default function PreAdmissionPage() {
     }, [])
 
     return (
-        <PageLayout fullWidth={true}>
+        <PageLayout fullWidth={true} lightHero>
             <style>{PA_KEYFRAMES}</style>
 
             {/* ── Section 1: Hero ── */}

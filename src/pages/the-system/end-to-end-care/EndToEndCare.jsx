@@ -36,7 +36,7 @@ export default function EndtoEndCarePage() {
     const ctaInView = useInView(ctaRef, { once: true, amount: 0.25 })
 
     return (
-        <PageLayout fullWidth={true}>
+        <PageLayout fullWidth={true} lightHero>
             <style>{`
                 @keyframes connectionPulse {
                     0%   { text-shadow: 0 0 0px rgba(0,105,112,0); }

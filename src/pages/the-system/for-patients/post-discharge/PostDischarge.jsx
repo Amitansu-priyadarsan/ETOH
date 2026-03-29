@@ -246,7 +246,7 @@ export default function PostDischargePage() {
     }, [])
 
     return (
-        <PageLayout fullWidth>
+        <PageLayout fullWidth lightHero>
             <style>{PD_KEYFRAMES}</style>
             <div style={{ background: 'white', minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
 

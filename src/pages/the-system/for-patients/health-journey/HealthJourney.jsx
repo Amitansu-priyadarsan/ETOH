@@ -313,7 +313,7 @@ export default function HealthJourneyPage() {
     }, [chartVisible])
 
     return (
-        <PageLayout fullWidth>
+        <PageLayout fullWidth lightHero>
             <style>{KF}</style>
             <div style={{ background: 'white', minHeight: '100vh', fontFamily: "'Inter', sans-serif" }}>
                 <div className="hj-page-wrap">

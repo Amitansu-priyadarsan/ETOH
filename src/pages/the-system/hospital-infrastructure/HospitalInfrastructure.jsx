@@ -21,7 +21,7 @@ export default function HospitalInfrastructurePage() {
     const [ctaRef,  ctaVisible]  = useInView()
 
     return (
-        <PageLayout fullWidth={true}>
+        <PageLayout fullWidth={true} lightHero>
 
             {/* ── Section 1: Hero ── */}
             <div style={{

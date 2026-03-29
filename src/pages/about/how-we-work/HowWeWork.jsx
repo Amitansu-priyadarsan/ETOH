@@ -39,7 +39,7 @@ export default function HowWeWorkPage() {
     const lineHeight = isMobile ? '44px' : isTablet ? '60px' : '72px'
 
     return (
-        <PageLayout title="How We Work" fullWidth={true}>
+        <PageLayout title="How We Work" fullWidth={true} lightHero>
             <style>{`
                 @keyframes gradientShift {
                     0%   { background-position: 0% 50%; }

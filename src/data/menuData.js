@@ -1,5 +1,9 @@
 export const menuData = [
     {
+        title: "Home",
+        slug: "",
+    },
+    {
         title: "About",
         slug: "about",
         children: [

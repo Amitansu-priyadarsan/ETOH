@@ -122,7 +122,7 @@ export default function InsightsPage() {
     const handleHubLeave = useCallback(() => setHubXY({ x: 0, y: 0 }), [])
 
     return (
-        <PageLayout title="" fullWidth={true}>
+        <PageLayout title="" fullWidth={true} lightHero>
             {/* ── global styles ── */}
             <style>{`
                 @keyframes glassSweep {
