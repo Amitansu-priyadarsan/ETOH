@@ -305,7 +305,7 @@ export default function Sidebar({ open, onClose }) {
 
                     <div style={{ height: isMobile ? '70px' : '90px', flexShrink: 0 }} />
 
-                    <nav style={{ flex: isMobile ? 'none' : 1, overflowY: isMobile ? 'visible' : 'auto' }}>
+                    <nav style={{ flex: isMobile ? 'none' : 1, overflowY: 'visible' }}>
                         {menuData.map((section, i) => (
                             <div key={i}>
                                 <MainNavItem
@@ -376,7 +376,7 @@ export default function Sidebar({ open, onClose }) {
                                 aria-label="Close submenu"
                             />
                         </div>
-                        <div style={{ flex: 1, overflowY: 'auto', padding: '20px 36px' }}>
+                        <div style={{ flex: 1, overflowY: hasSubmenu ? 'auto' : 'hidden', padding: '20px 36px' }}>
                             {activeItem?.children?.map((child, i) => (
                                 <SubMenuItem
                                     key={i}
@@ -416,7 +416,7 @@ export default function Sidebar({ open, onClose }) {
                                 aria-label="Close submenu"
                             />
                         </div>
-                        <div style={{ flex: 1, overflowY: 'auto', padding: '20px 36px' }}>
+                        <div style={{ flex: 1, overflowY: hasThirdLevel ? 'auto' : 'hidden', padding: '20px 36px' }}>
                             {activeSubItem?.children?.map((grandchild, i) => (
                                 <ThirdLevelItem
                                     key={i}
