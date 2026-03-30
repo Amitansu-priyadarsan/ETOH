@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, useInView } from 'framer-motion'
 import PageLayout from '../../../components/PageLayout'
 import { useResponsive } from '../../../hooks/useResponsive'
@@ -11,6 +12,7 @@ const ease = [0.22, 1, 0.36, 1]
 const sharp = [0.25, 0.46, 0.45, 0.94]
 
 export default function NewsPage() {
+    const navigate = useNavigate()
     const { isMobile } = useResponsive()
 
     const featuredRef = useRef(null)
@@ -92,7 +94,7 @@ export default function NewsPage() {
                                 <div style={{ color: '#A9C7FF', fontSize: 15, fontFamily: 'Inter', fontWeight: 400, lineHeight: '22px', maxWidth: 440 }}>
                                     A multi-year partnership defining the next decade of operative efficiency and patient safety protocol automation.
                                 </div>
-                                <div style={{ paddingTop: 8, display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                                <div onClick={() => navigate('/news-insights/news/architecting-future-federal-health-systems')} style={{ paddingTop: 8, display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
                                     <span style={{ color: '#1FC9C3', fontSize: 12, fontFamily: 'Inter', fontWeight: 700, textTransform: 'uppercase', lineHeight: '16px', letterSpacing: 1.20 }}>
                                         Read Press Release
                                     </span>
@@ -209,9 +211,9 @@ export default function NewsPage() {
 
                         <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 40 : 28 }}>
                             {[
-                                { src: image1, pub: 'The New York Times', title: 'How ETOH is Rewiring the Modern Hospital Brain', body: "A deep dive into the algorithmic infrastructure that has reduced operative delays by 22% in the nation's…", delay: 0.1 },
-                                { src: image2, pub: 'Wired Magazine', title: 'The Architects of Clinical Precision', body: "Beyond the EHR: ETOH's layer of orchestration is the missing piece in the trillion-dollar healthcare puzzle.", delay: 0.2 },
-                                { src: image3, pub: 'Modern Healthcare', title: 'Operational Excellence at Scale', body: 'Analyzing the ROI of ETOH deployments across the largest healthcare networks in North America.', delay: 0.3 },
+                                { src: image1, pub: 'The New York Times', title: 'How ETOH is Rewiring the Modern Hospital Brain', body: "A deep dive into the algorithmic infrastructure that has reduced operative delays by 22% in the nation's…", delay: 0.1, slug: 'how-etoh-is-rewiring-modern-hospital' },
+                                { src: image2, pub: 'Wired Magazine', title: 'The Architects of Clinical Precision', body: "Beyond the EHR: ETOH's layer of orchestration is the missing piece in the trillion-dollar healthcare puzzle.", delay: 0.2, slug: 'architects-of-clinical-precision' },
+                                { src: image3, pub: 'Modern Healthcare', title: 'Operational Excellence at Scale', body: 'Analyzing the ROI of ETOH deployments across the largest healthcare networks in North America.', delay: 0.3, slug: 'operational-excellence-at-scale' },
                             ].map((article) => (
                                 <motion.div
                                     key={article.pub}
@@ -232,7 +234,10 @@ export default function NewsPage() {
                                     <div style={{ color: '#43474F', fontSize: 14, fontFamily: 'Inter', fontWeight: 400, lineHeight: '21px', marginBottom: 20, flex: 1 }}>
                                         {article.body}
                                     </div>
-                                    <span style={{ color: '#001736', fontSize: 12, fontFamily: 'Inter', fontWeight: 600, textDecoration: 'underline', textTransform: 'uppercase', lineHeight: '16px', letterSpacing: 1.20, cursor: 'pointer' }}>
+                                    <span
+                                        onClick={() => navigate(`/news-insights/news/${article.slug}`)}
+                                        style={{ color: '#001736', fontSize: 12, fontFamily: 'Inter', fontWeight: 600, textDecoration: 'underline', textTransform: 'uppercase', lineHeight: '16px', letterSpacing: 1.20, cursor: 'pointer' }}
+                                    >
                                         Read Article
                                     </span>
                                 </motion.div>

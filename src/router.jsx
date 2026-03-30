@@ -37,6 +37,7 @@ import PublicHealthMissionPage from './pages/impact/public-health-mission/Public
 // News & Insights
 import NewsInsightsPage from './pages/news-insights/NewsInsights'
 import NewsPage from './pages/news-insights/news/News'
+import NewsArticlePage from './pages/news-insights/news/NewsArticle'
 import InsightsPage from './pages/news-insights/insights/Insights'
 
 export const router = createBrowserRouter([
@@ -78,5 +79,6 @@ export const router = createBrowserRouter([
     // News & Insights
     { path: '/news-insights', element: <NewsInsightsPage /> },
     { path: '/news-insights/news', element: <NewsPage /> },
+    { path: '/news-insights/news/:slug', element: <NewsArticlePage /> },
     { path: '/news-insights/insights', element: <InsightsPage /> },
 ])
