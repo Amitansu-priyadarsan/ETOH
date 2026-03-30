@@ -13,7 +13,7 @@ export default function NewsArticlePage() {
     const navigate = useNavigate()
     const location = useLocation()
     const { isMobile } = useResponsive()
-    const { getBySlug, getRelated } = useNews()
+    const { getBySlug, getRelated, loading } = useNews()
     const article = getBySlug(slug)
 
     useEffect(() => {
@@ -24,6 +24,16 @@ export default function NewsArticlePage() {
     const relatedRef = useRef(null)
     const contentInView = useInView(contentRef, { once: true, amount: 0.1 })
     const relatedInView = useInView(relatedRef, { once: true, amount: 0.15 })
+
+    if (loading) {
+        return (
+            <PageLayout fullWidth title="" lightHero>
+                <div style={{ fontFamily: "'Inter', sans-serif", padding: '120px 24px', textAlign: 'center' }}>
+                    <div style={{ color: '#43474F', fontSize: 18, fontFamily: 'Inter' }}>Loading article...</div>
+                </div>
+            </PageLayout>
+        )
+    }
 
     if (!article) {
         return (
