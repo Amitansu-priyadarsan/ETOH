@@ -59,6 +59,22 @@ export default function NewsArticlePage() {
                 <div style={{ padding: isMobile ? '48px 16px 0' : '80px 32px 0', maxWidth: 1536, margin: '0 auto' }}>
                     <div style={{ maxWidth: 896, display: 'flex', flexDirection: 'column', gap: 32 }}>
 
+                        {/* Back Button */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -8 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.5, ease: sharp }}
+                        >
+                            <Link to="/news-insights/news" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: '#43474F' }}>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13 8H3M3 8L7.5 3.5M3 8L7.5 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                                <span style={{ fontSize: 14, fontFamily: 'Inter', fontWeight: 600, lineHeight: '20px' }}>
+                                    Back to News
+                                </span>
+                            </Link>
+                        </motion.div>
+
                         {/* Badge + Date */}
                         <motion.div
                             initial={{ opacity: 0, y: 8 }}

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import PageLayout from '../../../components/PageLayout'
 import { useResponsive } from '../../../hooks/useResponsive'
 import { useNews } from '../../../context/NewsContext'
+import emptyNewsPreview from './assets/empty-news-preview.png'
 
 const ease = [0.22, 1, 0.36, 1]
 const sharp = [0.25, 0.46, 0.45, 0.94]
@@ -106,7 +107,7 @@ export default function NewsPage() {
                                     </div>
                                     <div style={{ paddingTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
                                         <span style={{ color: '#1FC9C3', fontSize: 12, fontFamily: 'Inter', fontWeight: 700, textTransform: 'uppercase', lineHeight: '16px', letterSpacing: 1.20 }}>
-                                            Read Press Release
+                                            READ PRESS RELEASE
                                         </span>
                                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M2.5 7H11.5M11.5 7L7.5 3M11.5 7L7.5 11" stroke="#1FC9C3" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -123,7 +124,7 @@ export default function NewsPage() {
                                         initial={{ opacity: 0, x: 30 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ duration: 0.65, ease: ease, delay: 0.2 + i * 0.12 }}
-                                        style={{ flex: 1, padding: 36, background: i === 0 ? 'white' : '#F3F4F5', borderLeft: i === 0 ? '4px #006970 solid' : 'none', borderRadius: 12, display: 'flex', flexDirection: 'column', gap: 10, justifyContent: 'center', cursor: 'pointer' }}
+                                        style={{ flex: 1, padding: 36, background: i === 0 ? 'white' : '#F3F4F5', display: 'flex', flexDirection: 'column', gap: 10, justifyContent: 'center', cursor: 'pointer' }}
                                         onClick={() => navigate(`/news-insights/news/${card.slug}`)}
                                     >
                                         <span style={{ color: i === 0 ? '#006970' : '#43474F', fontSize: 10, fontFamily: 'Inter', fontWeight: 600, textTransform: 'uppercase', lineHeight: '15px', letterSpacing: 2 }}>
@@ -163,17 +164,21 @@ export default function NewsPage() {
                                         initial={{ opacity: 0, y: 16 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.55, ease: sharp, delay: 0.1 + i * 0.12 }}
-                                        style={{ display: 'flex', flexDirection: 'column', gap: 8, cursor: 'pointer' }}
+                                        style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 8 : 48, cursor: 'pointer' }}
                                         onClick={() => navigate(`/news-insights/news/${item.slug}`)}
                                     >
-                                        <span style={{ color: '#43474F', fontSize: 12, fontFamily: 'Inter', fontWeight: 700, lineHeight: '16px', letterSpacing: 1.20 }}>
-                                            {item.date}
-                                        </span>
-                                        <div style={{ color: '#001736', fontSize: 22, fontFamily: 'Manrope', fontWeight: 700, lineHeight: '30px' }}>
-                                            {item.title}
+                                        <div style={{ width: isMobile ? 'auto' : 160, flexShrink: 0, paddingTop: 4 }}>
+                                            <span style={{ color: '#43474F', fontSize: 12, fontFamily: 'Inter', fontWeight: 700, lineHeight: '16px', letterSpacing: 1.20, textTransform: 'uppercase' }}>
+                                                {item.date}
+                                            </span>
                                         </div>
-                                        <div style={{ color: '#43474F', fontSize: 16, fontFamily: 'Inter', fontWeight: 400, lineHeight: '26px' }}>
-                                            {item.excerpt || ''}
+                                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                            <div style={{ color: '#001736', fontSize: 22, fontFamily: 'Manrope', fontWeight: 700, lineHeight: '30px' }}>
+                                                {item.title}
+                                            </div>
+                                            <div style={{ color: '#43474F', fontSize: 16, fontFamily: 'Inter', fontWeight: 400, lineHeight: '26px' }}>
+                                                {item.excerpt || ''}
+                                            </div>
                                         </div>
                                     </motion.div>
                                 ))}
@@ -205,11 +210,9 @@ export default function NewsPage() {
                                         transition={{ duration: 0.6, ease: ease, delay: 0.1 + i * 0.1 }}
                                         style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
                                     >
-                                        {article.heroImage && (
-                                            <div style={{ background: '#E7E8E9', overflow: 'hidden', marginBottom: 20 }}>
-                                                <img style={{ width: '100%', height: 160, objectFit: 'cover', display: 'block' }} src={article.heroImage} alt={article.publication || article.title} />
-                                            </div>
-                                        )}
+                                        <div style={{ background: '#E7E8E9', overflow: 'hidden', marginBottom: 20 }}>
+                                            <img style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover', display: 'block' }} src={article.heroImage || emptyNewsPreview} alt={article.publication || article.title} />
+                                        </div>
                                         <span style={{ color: '#006970', fontSize: 10, fontFamily: 'Inter', fontWeight: 600, textTransform: 'uppercase', lineHeight: '15px', letterSpacing: 1, marginBottom: 10 }}>
                                             {article.publication || article.category}
                                         </span>
@@ -219,12 +222,14 @@ export default function NewsPage() {
                                         <div style={{ color: '#43474F', fontSize: 14, fontFamily: 'Inter', fontWeight: 400, lineHeight: '21px', marginBottom: 20, flex: 1 }}>
                                             {article.excerpt || ''}
                                         </div>
-                                        <span
-                                            onClick={() => navigate(`/news-insights/news/${article.slug}`)}
-                                            style={{ color: '#001736', fontSize: 12, fontFamily: 'Inter', fontWeight: 600, textDecoration: 'underline', textTransform: 'uppercase', lineHeight: '16px', letterSpacing: 1.20, cursor: 'pointer' }}
-                                        >
-                                            Read Article
-                                        </span>
+                                        <div>
+                                            <span
+                                                onClick={() => navigate(`/news-insights/news/${article.slug}`)}
+                                                style={{ color: '#001736', fontSize: 12, fontFamily: 'Inter', fontWeight: 600, textDecoration: 'underline', textTransform: 'uppercase', lineHeight: '16px', letterSpacing: 1.20, cursor: 'pointer', display: 'inline-block' }}
+                                            >
+                                                READ ARTICLE
+                                            </span>
+                                        </div>
                                     </motion.div>
                                 ))}
                             </div>
