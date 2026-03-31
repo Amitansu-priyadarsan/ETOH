@@ -101,9 +101,9 @@ export const router = createBrowserRouter([
         path: '/admin',
         element: <AdminLayout />,
         children: [
-            { path: 'dashboard', element: <AdminDashboard /> },
-            { path: 'news', element: <NewsManagement /> },
-            { path: 'insights', element: <InsightManagement /> },
+            { path: '/admin/dashboard', element: <AdminDashboard /> },
+            { path: '/admin/news', element: <NewsManagement /> },
+            { path: '/admin/insights', element: <InsightManagement /> },
         ],
     },
 ])
